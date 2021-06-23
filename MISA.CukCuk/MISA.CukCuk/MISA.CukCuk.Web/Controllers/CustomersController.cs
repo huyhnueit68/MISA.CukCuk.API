@@ -33,10 +33,12 @@ namespace MISA.CukCuk.Web.Controllers
 
             IDbConnection dbConnection = new MySqlConnection(connectionString);
 
-            var sqlCommand = "SELECT * FROM Customer";
+            /*var sqlCommand = "SELECT * FROM Customer";*/
             dbConnection.Open();
             /*var customers = dbConnection.Query<Customer>(sqlCommand);*/
-            var customers = dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);     
+            var customers = dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);
+            dbConnection.Close();
+
             return Ok(customers);
         }
 
@@ -56,10 +58,11 @@ namespace MISA.CukCuk.Web.Controllers
             IDbConnection dbConnection = new MySqlConnection(connectionString);
 
             dbConnection.Open();
-            var sqlCommand = $"SELECT * FROM Customer WHERE CustomerId='{id.ToString()}'";
+            /*var sqlCommand = $"SELECT * FROM Customer WHERE CustomerId='{id.ToString()}'";*/
             /*var customers = dbConnection.QueryFirstOrDefault<Customer>(sqlCommand);*/
-            /*0a730933-b227-11eb-8a1f-00163e047e89*/
+            
             var customers = dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = id }, commandType: CommandType.StoredProcedure);
+            dbConnection.Close();
 
             return Ok(customers);
         }
@@ -68,32 +71,171 @@ namespace MISA.CukCuk.Web.Controllers
         /// Thêm khách hàng
         /// </summary>
         /// <param name="customer"></param>
-        /// <returns></returns>
+        /// <returns>trả về dữ liệu khách hàng đã thêm thành công</returns>
         [HttpPost]
-        public IActionResult Post(Customer customer)
+        public IActionResult Post([FromBody]Customer customer)
         {
+            /*connect data base*/
+
             var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-
             IDbConnection dbConnection = new MySqlConnection(connectionString);
-
             dbConnection.Open();
 
-            /*var customers = dbConnection.QueryFirstOrDefault<Customer>(sqlCommand);*/
-            /*0a730933-b227-11eb-8a1f-00163e047e89*/
-            var rowAffects = dbConnection.Execute("Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
-
-            if(rowAffects > 0)
+            /* validate data */
+            // validate field not null
+            if(string.IsNullOrEmpty(customer.CustomerCode))
             {
-
+                var msg = new
+                {
+                    devMsg = new
+                    {
+                        fieldName = "CustomerCode",
+                        msg = "Mã khách hàng không được phép để trống",
+                        Code = "400"
+                    },
+                    userMsg = "Mã khách hàng không được phép để trống",
+                };
+                return BadRequest(msg);
             }
-            return Ok(customers);
+
+            // validate duplicate code
+            var res = dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = customer.CustomerCode }, commandType: CommandType.StoredProcedure);
+            if(res.Count() > 0)
+            {
+                var msg = new
+                {
+                    devMsg = new
+                    {
+                        fieldName = "CustomerCode",
+                        msg = "Mã khách hàng đã tồn tại",
+                        Code = "401"
+                    },
+                    userMsg = "Mã khách hàng đã tồn tại",
+                };
+                return BadRequest(msg);
+            }
+
+            // validate customer group id
+            var resCustomerGroup = dbConnection.Query<CustomerGroup>("Proc_GetCustomerGroupById", new { CustomerGroupId = customer.CustomerGroupId }, commandType: CommandType.StoredProcedure);
+            if(resCustomerGroup.Count() <= 0)
+            {
+                var msg = new
+                {
+                    devMsg = new
+                    {
+                        fieldName = "CustomerGroupId",
+                        msg = "Không tồn tại mã nhóm",
+                        Code = "401"
+                    },
+                    userMsg = "Không tồn tại mã nhóm",
+                };
+                return BadRequest(msg);
+            }
+
+            /* insert record */
+            var rowAffects = dbConnection.Execute("Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
+            dbConnection.Close();
+
+            /* check row affects*/
+            if (rowAffects > 0)
+            {
+                return Created("Customer", customer);
+            } else
+            {
+                return NoContent();
+            }
+
         }
 
-        // PUT api/<CustomersController>/5
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] string value)
+        /// <summary>
+        /// Sửa dữ liệu khách hàng
+        /// </summary>
+        /// <param name="CustomerId">mã khách hàng</param>
+        /// <param name="customer">dữ liệu khách hàng cần thay đổi</param>
+        /// <returns>trả về khách hàng đã sửa thành công</returns>
+        [HttpPut("{CustomerId}")]
+        public IActionResult Put(Guid CustomerId, [FromBody] Customer customer)
         {
-            return Ok(1);
+            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
+            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            dbConnection.Open();
+
+            /* validate data */
+            // validate field not null
+            if (string.IsNullOrEmpty(customer.CustomerCode))
+            {
+                var msg = new
+                {
+                    devMsg = new
+                    {
+                        fieldName = "CustomerCode",
+                        msg = "Mã khách hàng không được phép để trống",
+                        Code = "400"
+                    },
+                    userMsg = "Mã khách hàng không được phép để trống",
+                };
+                return BadRequest(msg);
+            }
+
+            //validate code record
+            var oldCustomer = dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = CustomerId }, commandType: CommandType.StoredProcedure);
+            var oldCustomerCode = oldCustomer.ToArray()[0].CustomerCode;
+           
+            if(customer.CustomerCode != oldCustomerCode)
+            {
+                // validate duplicate code
+                var customerCode = dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = customer.CustomerCode }, commandType: CommandType.StoredProcedure);
+                if (customerCode.Count() > 0)
+                {
+                    var msg = new
+                    {
+                        devMsg = new
+                        {
+                            fieldName = "CustomerCode",
+                            msg = "Mã khách hàng đã tồn tại",
+                            Code = "401"
+                        },
+                        userMsg = "Mã khách hàng đã tồn tại",
+                    };
+                    return BadRequest(msg);
+                }
+
+            } else
+            {
+                // validate customer groud id
+                var res = dbConnection.Query<Customer>("Proc_GetCustomerGroupById", new { CustomerGroupId = customer.CustomerGroupId }, commandType: CommandType.StoredProcedure);
+                if (res.Count() <= 0)
+                {
+                    var msg = new
+                    {
+                        devMsg = new
+                        {
+                            fieldName = "CustomerGroupId",
+                            msg = "Không tồn tại mã nhóm",
+                            Code = "401"
+                        },
+                        userMsg = "Không tồn tại mã nhóm",
+                    };
+                    return BadRequest(msg);
+                }
+
+                var upDateCustomer = dbConnection.Query<Customer>("Proc_UpdateCustomer", new { Customer = customer }, commandType: CommandType.StoredProcedure);
+
+                dbConnection.Close();
+
+                /* check row affects*/
+                if (upDateCustomer.Count() > 0)
+                {
+                    return Created("Customer", upDateCustomer);
+                }
+                else
+                {
+                    return NoContent();
+                }
+
+            }
+
+            return NoContent();
         }
 
         // DELETE api/<CustomersController>/5

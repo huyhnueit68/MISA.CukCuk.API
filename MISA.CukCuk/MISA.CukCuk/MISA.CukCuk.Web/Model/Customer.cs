@@ -56,7 +56,7 @@ namespace MISA.CukCuk.Web.Model
         /// <summary>
         /// Giới tính (0- nữ, 1- nam, 2- khác)
         /// </summary>
-        public int? Grender { get; set; }
+        public int? Gender { get; set; }
 
         /// <summary>
         /// email khách hàng

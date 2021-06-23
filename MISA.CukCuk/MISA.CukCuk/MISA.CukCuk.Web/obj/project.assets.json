@@ -141,15 +141,6 @@
           "lib/net5.0/Zstandard.Net.dll": {}
         }
       },
-      "MySqlConnector/1.3.10": {
-        "type": "package",
-        "compile": {
-          "lib/net5.0/MySqlConnector.dll": {}
-        },
-        "runtime": {
-          "lib/net5.0/MySqlConnector.dll": {}
-        }
-      },
       "Swashbuckle.AspNetCore/5.6.3": {
         "type": "package",
         "dependencies": {
@@ -612,37 +603,6 @@
         "mysql.data.nuspec"
       ]
     },
-    "MySqlConnector/1.3.10": {
-      "sha512": "geL3pNiwbSXzUqQLHLm2/igDHuz5Q4qqp2rKczYoIHtdvvrsd5fnYHN8eFgP81qu77Blv0+0IOn69RJATNQoSQ==",
-      "type": "package",
-      "path": "mysqlconnector/1.3.10",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "README.md",
-        "lib/net45/MySqlConnector.dll",
-        "lib/net45/MySqlConnector.xml",
-        "lib/net461/MySqlConnector.dll",
-        "lib/net461/MySqlConnector.xml",
-        "lib/net471/MySqlConnector.dll",
-        "lib/net471/MySqlConnector.xml",
-        "lib/net5.0/MySqlConnector.dll",
-        "lib/net5.0/MySqlConnector.xml",
-        "lib/netcoreapp2.1/MySqlConnector.dll",
-        "lib/netcoreapp2.1/MySqlConnector.xml",
-        "lib/netcoreapp3.1/MySqlConnector.dll",
-        "lib/netcoreapp3.1/MySqlConnector.xml",
-        "lib/netstandard1.3/MySqlConnector.dll",
-        "lib/netstandard1.3/MySqlConnector.xml",
-        "lib/netstandard2.0/MySqlConnector.dll",
-        "lib/netstandard2.0/MySqlConnector.xml",
-        "lib/netstandard2.1/MySqlConnector.dll",
-        "lib/netstandard2.1/MySqlConnector.xml",
-        "logo.png",
-        "mysqlconnector.1.3.10.nupkg.sha512",
-        "mysqlconnector.nuspec"
-      ]
-    },
     "Swashbuckle.AspNetCore/5.6.3": {
       "sha512": "UkL9GU0mfaA+7RwYjEaBFvAzL8qNQhNqAeV5uaWUu/Z+fVgvK9FHkGCpTXBqSQeIHuZaIElzxnLDdIqGzuCnVg==",
       "type": "package",
@@ -1085,24 +1045,23 @@
     "net5.0": [
       "Dapper >= 2.0.90",
       "MySql.Data >= 8.0.25",
-      "MySqlConnector >= 1.3.10",
       "Swashbuckle.AspNetCore >= 5.6.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
+    "C:\\Users\\pqhuy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
+      "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
       "projectName": "MISA.CukCuk.Web",
-      "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
-      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\obj\\",
+      "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
+      "packagesPath": "C:\\Users\\pqhuy\\.nuget\\packages\\",
+      "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pqhuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1136,10 +1095,6 @@
             "target": "Package",
             "version": "[8.0.25, )"
           },
-          "MySqlConnector": {
-            "target": "Package",
-            "version": "[1.3.10, )"
-          },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[5.6.3, )"
@@ -1163,7 +1118,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
