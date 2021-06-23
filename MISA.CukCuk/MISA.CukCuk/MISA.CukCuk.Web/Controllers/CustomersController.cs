@@ -162,7 +162,7 @@ namespace MISA.CukCuk.Web.Controllers
 
             /* validate data */
             // validate field not null
-            if (string.IsNullOrEmpty(customer.CustomerCode))
+            /*if (string.IsNullOrEmpty(customer.CustomerCode))
             {
                 var msg = new
                 {
@@ -175,32 +175,13 @@ namespace MISA.CukCuk.Web.Controllers
                     userMsg = "Mã khách hàng không được phép để trống",
                 };
                 return BadRequest(msg);
-            }
+            }*/
 
             //validate code record
             var oldCustomer = dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = CustomerId }, commandType: CommandType.StoredProcedure);
             var oldCustomerCode = oldCustomer.ToArray()[0].CustomerCode;
            
-            if(customer.CustomerCode != oldCustomerCode)
-            {
-                // validate duplicate code
-                var customerCode = dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = customer.CustomerCode }, commandType: CommandType.StoredProcedure);
-                if (customerCode.Count() > 0)
-                {
-                    var msg = new
-                    {
-                        devMsg = new
-                        {
-                            fieldName = "CustomerCode",
-                            msg = "Mã khách hàng đã tồn tại",
-                            Code = "401"
-                        },
-                        userMsg = "Mã khách hàng đã tồn tại",
-                    };
-                    return BadRequest(msg);
-                }
-
-            } else
+            if(customer.CustomerCode == oldCustomerCode)
             {
                 // validate customer groud id
                 var res = dbConnection.Query<Customer>("Proc_GetCustomerGroupById", new { CustomerGroupId = customer.CustomerGroupId }, commandType: CommandType.StoredProcedure);
@@ -219,7 +200,7 @@ namespace MISA.CukCuk.Web.Controllers
                     return BadRequest(msg);
                 }
 
-                var upDateCustomer = dbConnection.Query<Customer>("Proc_UpdateCustomer", new { Customer = customer }, commandType: CommandType.StoredProcedure);
+                var upDateCustomer = dbConnection.Query<Customer>("Proc_UpdateCustomer", new { CustomerId = CustomerId , Customer = customer }, commandType: CommandType.StoredProcedure);
 
                 dbConnection.Close();
 
@@ -232,7 +213,6 @@ namespace MISA.CukCuk.Web.Controllers
                 {
                     return NoContent();
                 }
-
             }
 
             return NoContent();
