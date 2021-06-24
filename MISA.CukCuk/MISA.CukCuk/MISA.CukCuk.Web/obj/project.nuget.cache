@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DCKa6LhN6YyhphYthUMI0zU96cHm57Hv/qxptQIay6Tf3mR61n/0FLnH8vYUYpSwB8PAKkXP790eRDVoKiDE1Q==",
+  "dgSpecHash": "7DzVrGIssHjmRy6HRTZn7zFuY6Bf6EG3qt5xYL65A5qeAo3xDgbKsJ7SGH8/LVKNL6QPyWF3YM+TnLGTc43qCg==",
   "success": true,
   "projectFilePath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
   "expectedPackageFiles": [
@@ -15,6 +15,7 @@
     "C:\\Users\\pqhuy\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\pqhuy\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\pqhuy\\.nuget\\packages\\mysql.data\\8.0.25\\mysql.data.8.0.25.nupkg.sha512",
+    "C:\\Users\\pqhuy\\.nuget\\packages\\mysqlconnector\\1.3.10\\mysqlconnector.1.3.10.nupkg.sha512",
     "C:\\Users\\pqhuy\\.nuget\\packages\\swashbuckle.aspnetcore\\5.6.3\\swashbuckle.aspnetcore.5.6.3.nupkg.sha512",
     "C:\\Users\\pqhuy\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\5.6.3\\swashbuckle.aspnetcore.swagger.5.6.3.nupkg.sha512",
     "C:\\Users\\pqhuy\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\5.6.3\\swashbuckle.aspnetcore.swaggergen.5.6.3.nupkg.sha512",

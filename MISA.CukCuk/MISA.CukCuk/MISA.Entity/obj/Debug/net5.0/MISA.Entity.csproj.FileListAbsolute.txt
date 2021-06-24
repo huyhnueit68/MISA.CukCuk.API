@@ -1,0 +1,12 @@
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\bin\Debug\net5.0\MISA.Entity.deps.json
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\bin\Debug\net5.0\MISA.Entity.dll
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\bin\Debug\net5.0\ref\MISA.Entity.dll
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\bin\Debug\net5.0\MISA.Entity.pdb
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.csprojAssemblyReference.cache
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.GeneratedMSBuildEditorConfig.editorconfig
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.AssemblyInfoInputs.cache
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.AssemblyInfo.cs
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.csproj.CoreCompileInputs.cache
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.dll
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\ref\MISA.Entity.dll
+D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.Entity\obj\Debug\net5.0\MISA.Entity.pdb

@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MISA.CukCuk.Web.Model;
 using Dapper;
 using System.Data;
 using MySql.Data.MySqlClient;
+using MISA.ApplicationCore;
+using MISA.Infrastructure.Model;
+using MISA.Entity;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,7 +16,7 @@ namespace MISA.CukCuk.Web.Controllers
 {
     /// <summary>
     /// Api Danh mục khác hàng
-    /// PQ Huy 21.06.2021
+    /// CreatedBy: PQ Huy (21/06/2021)
     /// </summary>
     [Route("v1/[controller]")]
     [ApiController]
@@ -22,227 +24,130 @@ namespace MISA.CukCuk.Web.Controllers
     {
         /// <summary>
         /// Lấy toàn bộ danh sách khác hàng
-        /// PQ Huy 21.06.2021
         /// </summary>
         /// <returns>Danh sách khách hàng</returns>
+        /// CreatedBy: PQ Huy (24/06/2021)
         [HttpGet]
         public IActionResult Get()
         {
-            // khởi tạo đường dẫn kết nối db misacukcuk_demo
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";  
+            // kết nối tới service
+            var customerService = new CustomerService();
 
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            // gọi function lấy dữ liệu
+            var customers = customerService.GetCustomers();
 
-            /*var sqlCommand = "SELECT * FROM Customer";*/
-            dbConnection.Open();
-            /*var customers = dbConnection.Query<Customer>(sqlCommand);*/
-            var customers = dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
-
+            //trả về dữ liệu
             return Ok(customers);
+            
         }
 
         /// <summary>
         /// Lấy ra danh sách khách hàng theo id và tên
         /// </summary>
         /// <param name="id">Id của khách hàng</param>
-        /// <param name="name">Tên của khách hàng</param>
         /// <returns>Danh sách khách hàng</returns>
-        /// PQ Huy 21.06.2021
+        /// CreatedBy: PQ Huy (21/06/2021)
         [HttpGet("filter")]
-        public IActionResult GetByID(Guid id)
+        public IActionResult GetCustomerById(Guid id)
         {
-            // khởi tạo đường dẫn kết nối db misacukcuk_demo
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
+            // kết nối tới service
+            var customerService = new CustomerService();
 
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            // gọi function lấy dữ liệu
+            var customers = customerService.GetCustomerById(id);
 
-            dbConnection.Open();
-            /*var sqlCommand = $"SELECT * FROM Customer WHERE CustomerId='{id.ToString()}'";*/
-            /*var customers = dbConnection.QueryFirstOrDefault<Customer>(sqlCommand);*/
-            
-            var customers = dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = id }, commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
-
+            //trả về dữ liệu
             return Ok(customers);
         }
 
         /// <summary>
         /// Thêm khách hàng
         /// </summary>
-        /// <param name="customer"></param>
-        /// <returns>trả về dữ liệu khách hàng đã thêm thành công</returns>
+        /// <param name="customer">Dữ liệu khách hàng cần thêm</param>
+        /// <returns>Trả về dữ liệu khách hàng đã thêm thành công</returns>
+        /// CreatedBy: PQ Huy (21/06/2021)
         [HttpPost]
         public IActionResult Post([FromBody]Customer customer)
         {
-            /*connect data base*/
+            // kết nối tới service
+            var customerService = new CustomerService();
 
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
-            dbConnection.Open();
+            // gọi function lấy dữ liệu
+            var serviceResult = customerService.InsertCustomer(customer);
 
-            /* validate data */
-            // validate field not null
-            if(string.IsNullOrEmpty(customer.CustomerCode))
+            //trả về dữ liệu
+            if(serviceResult.MISACode == MISAEnum.NotValid)
             {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Mã khách hàng không được phép để trống",
-                        Code = "400"
-                    },
-                    userMsg = "Mã khách hàng không được phép để trống",
-                };
-                return BadRequest(msg);
+                return BadRequest(serviceResult.Data);
             }
-
-            // validate duplicate code
-            var res = dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = customer.CustomerCode }, commandType: CommandType.StoredProcedure);
-            if(res.Count() > 0)
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Mã khách hàng đã tồn tại",
-                        Code = "401"
-                    },
-                    userMsg = "Mã khách hàng đã tồn tại",
-                };
-                return BadRequest(msg);
-            }
-
-            // validate customer group id
-            var resCustomerGroup = dbConnection.Query<CustomerGroup>("Proc_GetCustomerGroupById", new { CustomerGroupId = customer.CustomerGroupId }, commandType: CommandType.StoredProcedure);
-            if(resCustomerGroup.Count() <= 0)
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerGroupId",
-                        msg = "Không tồn tại mã nhóm",
-                        Code = "401"
-                    },
-                    userMsg = "Không tồn tại mã nhóm",
-                };
-                return BadRequest(msg);
-            }
-
-            /* insert record */
-            var rowAffects = dbConnection.Execute("Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
-
-            /* check row affects*/
-            if (rowAffects > 0)
+            if(serviceResult.MISACode == MISAEnum.IsValid && (int)serviceResult.Data > 0)
             {
                 return Created("Customer", customer);
-            } else
+            }
+            else
             {
                 return NoContent();
             }
-
         }
 
         /// <summary>
         /// Sửa dữ liệu khách hàng
         /// </summary>
-        /// <param name="CustomerId">mã khách hàng</param>
+        /// <param name="id">mã khách hàng</param>
         /// <param name="customer">dữ liệu khách hàng cần thay đổi</param>
-        /// <returns>trả về khách hàng đã sửa thành công</returns>
-        [HttpPut("{CustomerId}")]
-        public IActionResult Put(Guid CustomerId, [FromBody] Customer customer)
+        /// <returns>Trả về khách hàng đã sửa thành công</returns>
+        /// CreatedBy: PQ Huy (21/06/2021)
+        [HttpPut("{id}")]
+        public IActionResult Put(Guid id, [FromBody] Customer customer)
         {
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
-            dbConnection.Open();
+            // kết nối tới service
+            var customerService = new CustomerService();
 
-            /* validate data */
-            // validate field not null
-            if (string.IsNullOrEmpty(customer.CustomerCode))
+            // gọi function lấy dữ liệu
+            var serviceResult = customerService.UpdateCustomer(id, customer);
+
+            //trả về dữ liệu
+            if (serviceResult.MISACode == MISAEnum.NotValid)
             {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Mã khách hàng không được phép để trống",
-                        Code = "400"
-                    },
-                    userMsg = "Mã khách hàng không được phép để trống",
-                };
-                return BadRequest(msg);
+                return BadRequest(serviceResult.Data);
             }
-
-            //validate code record
-            var oldCustomer = dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = CustomerId }, commandType: CommandType.StoredProcedure);
-            var oldCustomerCode = oldCustomer.ToArray()[0].CustomerCode;
-           
-            if(customer.CustomerCode != oldCustomerCode)
+            if (serviceResult.MISACode == MISAEnum.IsValid && (int)serviceResult.Data > 0)
             {
-                // validate duplicate code
-                var customerCode = dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = customer.CustomerCode }, commandType: CommandType.StoredProcedure);
-                if (customerCode.Count() > 0)
-                {
-                    var msg = new
-                    {
-                        devMsg = new
-                        {
-                            fieldName = "CustomerCode",
-                            msg = "Mã khách hàng đã tồn tại",
-                            Code = "401"
-                        },
-                        userMsg = "Mã khách hàng đã tồn tại",
-                    };
-                    return BadRequest(msg);
-                }
-
-            } else
-            {
-                // validate customer groud id
-                var res = dbConnection.Query<Customer>("Proc_GetCustomerGroupById", new { CustomerGroupId = customer.CustomerGroupId }, commandType: CommandType.StoredProcedure);
-                if (res.Count() <= 0)
-                {
-                    var msg = new
-                    {
-                        devMsg = new
-                        {
-                            fieldName = "CustomerGroupId",
-                            msg = "Không tồn tại mã nhóm",
-                            Code = "401"
-                        },
-                        userMsg = "Không tồn tại mã nhóm",
-                    };
-                    return BadRequest(msg);
-                }
-
-                var upDateCustomer = dbConnection.Query<Customer>("Proc_UpdateCustomer", new { Customer = customer }, commandType: CommandType.StoredProcedure);
-
-                dbConnection.Close();
-
-                /* check row affects*/
-                if (upDateCustomer.Count() > 0)
-                {
-                    return Created("Customer", upDateCustomer);
-                }
-                else
-                {
-                    return NoContent();
-                }
-
+                return Created("Customer", customer);
             }
-
-            return NoContent();
+            else
+            {
+                return NoContent();
+            }
         }
 
-        // DELETE api/<CustomersController>/5
+        /// <summary>
+        /// Xóa khách hàng theo id
+        /// </summary>
+        /// <param name="id">mã khách hàng</param>
+        /// <returns>Trạng thái cập nhật</returns>
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
-            return Ok();
+            // kết nối tới service
+            var customerService = new CustomerService();
+
+            // gọi function lấy dữ liệu
+            var serviceResult = customerService.DeleteCustomerById(id);
+
+            //trả về dữ liệu
+            if (serviceResult.MISACode == MISAEnum.NotValid)
+            {
+                return BadRequest(serviceResult.Data);
+            }
+            if (serviceResult.MISACode == MISAEnum.IsValid && (int)serviceResult.Data > 0)
+            {
+                return Ok(serviceResult);
+            }
+            else
+            {
+                return NoContent();
+            }
         }
     }
 }

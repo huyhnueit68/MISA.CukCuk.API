@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MISA.CukCuk.Web.Model
+namespace MISA.Infrastructure.Model
 {
     public class CustomerGroup
     {
@@ -36,7 +36,7 @@ namespace MISA.CukCuk.Web.Model
         /// <summary>
         /// người tạo bản ghi
         /// </summary>
-        public DateTime CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
 
         /// <summary>
         /// ngày thay đổi

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MISA.CukCuk.Web.Model
+namespace MISA.Infrastructure.Model
 {
     /// <summary>
     /// Customer
