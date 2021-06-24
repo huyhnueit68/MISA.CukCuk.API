@@ -85,7 +85,7 @@ namespace MISA.CukCuk.Web.Controllers
             {
                 return BadRequest(serviceResult.Data);
             }
-            if(serviceResult.MISACode == MISAEnum.IsValid && (int)serviceResult.Data > 0)
+            if(serviceResult.MISACode == MISAEnum.IsValid)
             {
                 return Created("Customer", customer);
             }
@@ -114,7 +114,7 @@ namespace MISA.CukCuk.Web.Controllers
             {
                 return BadRequest(serviceResult.Data);
             }
-            if (serviceResult.MISACode == MISAEnum.IsValid && (int)serviceResult.Data > 0)
+            if (serviceResult.MISACode == MISAEnum.IsValid)
             {
                 return Created("Customer", customer);
             }
@@ -141,7 +141,7 @@ namespace MISA.CukCuk.Web.Controllers
             {
                 return BadRequest(serviceResult.Data);
             }
-            if (serviceResult.MISACode == MISAEnum.IsValid && (int)serviceResult.Data > 0)
+            if (serviceResult.MISACode == MISAEnum.IsValid)
             {
                 return Ok(serviceResult);
             }
@@ -149,6 +149,7 @@ namespace MISA.CukCuk.Web.Controllers
             {
                 return NoContent();
             }
+
         }
     }
 }

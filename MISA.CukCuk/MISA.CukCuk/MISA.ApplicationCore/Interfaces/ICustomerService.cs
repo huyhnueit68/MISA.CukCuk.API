@@ -15,14 +15,6 @@ namespace MISA.ApplicationCore.Interfaces
 
         ServiceResult InsertCustomer(Customer customer);
 
-        Customer GetCustomerByCode(string code);
-
-        CustomerGroup GetCustomerGroupById(Guid id);
-
-        Customer GetCustomerGroupByPhone(string phoneNumber);
-
-        Customer GetCustomerByEmail(string email);
-
         ServiceResult UpdateCustomer(Guid id, Customer customer);
 
         ServiceResult DeleteCustomerById(Guid customerId);

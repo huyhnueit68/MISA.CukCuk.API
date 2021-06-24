@@ -126,7 +126,7 @@ namespace MISA.Infrastructure
         /// <param name="phoneNumber">Số điện thoại khách hàng</param>
         /// <returns>Trả về khách hàng có số điện thoại tương ứng</returns>
         /// CreatedBy: PQ Huy (24/06/2021)
-        public Customer GetCustomerGroupByPhone(string phoneNumber)
+        public Customer GetCustomerByPhone(string phoneNumber)
         {
             //kết nối database
             var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";

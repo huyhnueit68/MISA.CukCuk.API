@@ -127,7 +127,7 @@ namespace MISA.ApplicationCore
             }
 
             // validate phone number
-            var resPhoneNumber = _customerRepository.GetCustomerGroupByPhone(customer.PhoneNumber);
+            var resPhoneNumber = _customerRepository.GetCustomerByPhone(customer.PhoneNumber);
             if (resPhoneNumber != null)
             {
                 var msg = new
@@ -240,7 +240,7 @@ namespace MISA.ApplicationCore
             // validate phone number
             if(oldCustomerCode.ToArray()[0].PhoneNumber != customer.PhoneNumber)
             {
-                var resPhoneNumber = _customerRepository.GetCustomerGroupByPhone(customer.PhoneNumber);
+                var resPhoneNumber = _customerRepository.GetCustomerByPhone(customer.PhoneNumber);
                 if (resPhoneNumber != null)
                 {
                     var msg = new
@@ -355,37 +355,6 @@ namespace MISA.ApplicationCore
                 return serviceResult;
             }
         }
-
-        public Customer GetCustomerByCode(string code)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CustomerGroup GetCustomerGroupById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Customer GetCustomerGroupByPhone(string phoneNumber)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Customer GetCustomerByEmail(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ServiceResult UpdateCustomer(Customer customer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ServiceResult DeleteCustomer(Guid customerId)
-        {
-            throw new NotImplementedException();
-        }
-
 
         #endregion
     }

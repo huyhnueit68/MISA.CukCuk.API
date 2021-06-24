@@ -10,3 +10,15 @@ D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\ob
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\ref\MISA.ApplicationCore.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.pdb
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.ApplicationCore.deps.json
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.ApplicationCore.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\ref\MISA.ApplicationCore.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.ApplicationCore.pdb
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csproj.AssemblyReference.cache
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.AssemblyInfoInputs.cache
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.AssemblyInfo.cs
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csproj.CoreCompileInputs.cache
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\ref\MISA.ApplicationCore.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.pdb

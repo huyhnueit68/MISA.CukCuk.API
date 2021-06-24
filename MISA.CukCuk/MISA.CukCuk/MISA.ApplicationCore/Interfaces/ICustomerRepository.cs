@@ -19,7 +19,7 @@ namespace MISA.ApplicationCore.Interfaces
 
         CustomerGroup GetCustomerGroupById(Guid id);
 
-        Customer GetCustomerGroupByPhone(string phoneNumber);
+        Customer GetCustomerByPhone(string phoneNumber);
 
         Customer GetCustomerByEmail(string email);
 
