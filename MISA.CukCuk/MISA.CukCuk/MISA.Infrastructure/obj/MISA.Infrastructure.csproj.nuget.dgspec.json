@@ -4,14 +4,14 @@
     "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {}
   },
   "projects": {
-    "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj": {
+    "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj",
-        "projectName": "MISA.Entity",
-        "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj",
+        "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+        "projectName": "MISA.ApplicationCore",
+        "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
         "packagesPath": "C:\\Users\\pqhuy\\.nuget\\packages\\",
-        "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\obj\\",
+        "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pqhuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -82,8 +82,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj": {
-                "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj"
+              "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
+                "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj"
               }
             }
           }

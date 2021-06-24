@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using MISA.Infrastructure.Model;
+using MISA.ApplicationCore.Entities;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
@@ -41,7 +41,7 @@ namespace MISA.Infrastructure
         /// <param name="id"> Mã khách hàng</param>
         /// <returns></returns>
         /// CreatedBy: PQ Huy (24/06/2021)
-        public IEnumerable<Customer> GetCustomersById(Guid id)
+        public IEnumerable<Customer> GetCustomerById(Guid id)
         {
             //kết nối database
             var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";

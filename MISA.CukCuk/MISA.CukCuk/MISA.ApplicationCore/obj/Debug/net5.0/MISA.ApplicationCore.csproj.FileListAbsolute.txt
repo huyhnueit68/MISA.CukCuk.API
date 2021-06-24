@@ -2,16 +2,11 @@ D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bi
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.ApplicationCore.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\ref\MISA.ApplicationCore.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.ApplicationCore.pdb
-D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.Infrastructure.dll
-D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.Infrastructure.pdb
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csprojAssemblyReference.cache
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.GeneratedMSBuildEditorConfig.editorconfig
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.AssemblyInfoInputs.cache
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.AssemblyInfo.cs
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csproj.CoreCompileInputs.cache
-D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csproj.CopyComplete
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\ref\MISA.ApplicationCore.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.pdb
-D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.Entity.dll
-D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\bin\Debug\net5.0\MISA.Entity.pdb

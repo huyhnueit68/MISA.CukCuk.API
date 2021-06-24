@@ -20,14 +20,14 @@
           "lib/net5.0/MySqlConnector.dll": {}
         }
       },
-      "MISA.Entity/1.0.0": {
+      "MISA.ApplicationCore/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v5.0",
         "compile": {
-          "bin/placeholder/MISA.Entity.dll": {}
+          "bin/placeholder/MISA.ApplicationCore.dll": {}
         },
         "runtime": {
-          "bin/placeholder/MISA.Entity.dll": {}
+          "bin/placeholder/MISA.ApplicationCore.dll": {}
         }
       }
     }
@@ -82,16 +82,16 @@
         "mysqlconnector.nuspec"
       ]
     },
-    "MISA.Entity/1.0.0": {
+    "MISA.ApplicationCore/1.0.0": {
       "type": "project",
-      "path": "../MISA.Entity/MISA.Entity.csproj",
-      "msbuildProject": "../MISA.Entity/MISA.Entity.csproj"
+      "path": "../MISA.ApplicationCore/MISA.ApplicationCore.csproj",
+      "msbuildProject": "../MISA.ApplicationCore/MISA.ApplicationCore.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "Dapper >= 2.0.90",
-      "MISA.Entity >= 1.0.0",
+      "MISA.ApplicationCore >= 1.0.0",
       "MySqlConnector >= 1.3.10"
     ]
   },
@@ -122,8 +122,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj": {
-              "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Entity\\MISA.Entity.csproj"
+            "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
+              "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj"
             }
           }
         }

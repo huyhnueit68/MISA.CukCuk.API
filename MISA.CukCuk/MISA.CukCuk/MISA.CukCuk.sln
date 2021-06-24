@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.ApplicationCore", "MIS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.Infrastructure", "MISA.Infrastructure\MISA.Infrastructure.csproj", "{D1DF7DD6-057C-436A-A937-5309B9AA4D4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MISA.Entity", "MISA.Entity\MISA.Entity.csproj", "{425D1609-975A-454B-8798-DF97763CB1A6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{D1DF7DD6-057C-436A-A937-5309B9AA4D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1DF7DD6-057C-436A-A937-5309B9AA4D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1DF7DD6-057C-436A-A937-5309B9AA4D4A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{425D1609-975A-454B-8798-DF97763CB1A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{425D1609-975A-454B-8798-DF97763CB1A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{425D1609-975A-454B-8798-DF97763CB1A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{425D1609-975A-454B-8798-DF97763CB1A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

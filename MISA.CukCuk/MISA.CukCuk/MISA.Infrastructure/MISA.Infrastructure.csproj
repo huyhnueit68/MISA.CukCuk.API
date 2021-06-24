@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MISA.Entity\MISA.Entity.csproj" />
+    <ProjectReference Include="..\MISA.ApplicationCore\MISA.ApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>

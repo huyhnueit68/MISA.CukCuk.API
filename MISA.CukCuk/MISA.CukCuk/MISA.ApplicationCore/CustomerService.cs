@@ -1,17 +1,30 @@
-﻿using MISA.Infrastructure.Model;
-using MISA.Infrastructure;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MISA.ApplicationCore.Entities;
-using MISA.Entity;
+using MISA.ApplicationCore.Enums;
+using MISA.ApplicationCore.Interfaces;
 
 namespace MISA.ApplicationCore
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
+        ICustomerRepository _customerRepository;
+
+        #region Construct
+        /// <summary>
+        /// hàm khỏi tạo cho customer service
+        /// </summary>
+        /// <param name="customerRepository"></param>
+        /// CreatedBy: PQ Huy (24.06.2021)
+        public CustomerService(ICustomerRepository customerRepository)
+        {
+            _customerRepository = customerRepository;
+        }
+
+        #endregion
         #region Method
         /// <summary>
         /// Lấy danh sách khàng
@@ -19,9 +32,8 @@ namespace MISA.ApplicationCore
         /// <returns>Trả về danh sách khách hàng</returns>
         /// CreatedBy: PQ Huy (24/06/2021)
         public IEnumerable<Customer> GetCustomers()
-        {
-            var customerContext = new CustomerContext();
-            var customers = customerContext.GetCustomers();
+        { 
+            var customers = _customerRepository.GetCustomers();
 
             return customers;
         }
@@ -34,9 +46,7 @@ namespace MISA.ApplicationCore
         /// CreatedBy: PQ Huy (24/06/2021)
         public IEnumerable<Customer> GetCustomerById(Guid id)
         {
-            var customerContext = new CustomerContext();
-            var serviceResult = new ServiceResult();
-            var customers = customerContext.GetCustomersById(id);
+            var customers = _customerRepository.GetCustomerById(id);
 
             return customers;
         }
@@ -50,7 +60,6 @@ namespace MISA.ApplicationCore
         public ServiceResult InsertCustomer(Customer customer)
         {
             var serviceResult = new ServiceResult();
-            var customerContext = new CustomerContext();
 
             // validate data
             // validate field not null, trả về lỗi khi validate
@@ -75,7 +84,7 @@ namespace MISA.ApplicationCore
             } 
 
             // validate duplicate code
-            var res = customerContext.GetCustomerByCode(customer.CustomerCode);
+            var res = _customerRepository.GetCustomerByCode(customer.CustomerCode);
             if (res != null)
             {
                 var msg = new
@@ -96,7 +105,7 @@ namespace MISA.ApplicationCore
             }
 
             // validate customer group id
-            var resCustomerGroup = customerContext.GetCustomerGroupById((Guid)customer.CustomerGroupId);
+            var resCustomerGroup = _customerRepository.GetCustomerGroupById((Guid)customer.CustomerGroupId);
             if (resCustomerGroup == null)
             {
                 var msg = new
@@ -118,7 +127,7 @@ namespace MISA.ApplicationCore
             }
 
             // validate phone number
-            var resPhoneNumber = customerContext.GetCustomerGroupByPhone(customer.PhoneNumber);
+            var resPhoneNumber = _customerRepository.GetCustomerGroupByPhone(customer.PhoneNumber);
             if (resPhoneNumber != null)
             {
                 var msg = new
@@ -140,7 +149,7 @@ namespace MISA.ApplicationCore
             }
 
             // validate email
-            var resEmail = customerContext.GetCustomerByEmail(customer.Email);
+            var resEmail = _customerRepository.GetCustomerByEmail(customer.Email);
             if (resEmail != null)
             {
                 var msg = new
@@ -163,7 +172,7 @@ namespace MISA.ApplicationCore
 
 
             // thêm mới khi validate thành công
-            var rowAffects = customerContext.InsertCustomer(customer);
+            var rowAffects = _customerRepository.InsertCustomer(customer);
 
             serviceResult.MISACode = MISAEnum.IsValid;
             serviceResult.Messenger = "Thêm dữ liệu thành công";
@@ -181,10 +190,9 @@ namespace MISA.ApplicationCore
         public ServiceResult UpdateCustomer(Guid id, Customer customer)
         {
             var serviceResult = new ServiceResult();
-            var customerContext = new CustomerContext();
 
             // validate dữ liệu
-            var oldCustomerCode = customerContext.GetCustomersById(id);
+            var oldCustomerCode = _customerRepository.GetCustomerById(id);
 
             //validate code
             if (oldCustomerCode.ToArray()[0].CustomerCode != customer.CustomerCode)
@@ -208,7 +216,7 @@ namespace MISA.ApplicationCore
             }
 
             // validate customer group id
-            var resCustomerGroup = customerContext.GetCustomerGroupById((Guid)customer.CustomerGroupId);
+            var resCustomerGroup = _customerRepository.GetCustomerGroupById((Guid)customer.CustomerGroupId);
             if (resCustomerGroup == null)
             {
                 var msg = new
@@ -232,7 +240,7 @@ namespace MISA.ApplicationCore
             // validate phone number
             if(oldCustomerCode.ToArray()[0].PhoneNumber != customer.PhoneNumber)
             {
-                var resPhoneNumber = customerContext.GetCustomerGroupByPhone(customer.PhoneNumber);
+                var resPhoneNumber = _customerRepository.GetCustomerGroupByPhone(customer.PhoneNumber);
                 if (resPhoneNumber != null)
                 {
                     var msg = new
@@ -253,11 +261,10 @@ namespace MISA.ApplicationCore
                     return serviceResult;
                 }
             }
-            
 
             // validate email
             if(oldCustomerCode.ToArray()[0].Email != customer.Email) {
-                var resEmail = customerContext.GetCustomerByEmail(customer.Email);
+                var resEmail = _customerRepository.GetCustomerByEmail(customer.Email);
                 if (resEmail != null)
                 {
                     var msg = new
@@ -281,9 +288,9 @@ namespace MISA.ApplicationCore
             
 
             //cập nhật dữ liệu khi validate thành công
-            var rowAffects = customerContext.UpdateCustomer(id, customer);
+            var rowAffects = _customerRepository.UpdateCustomer(id, customer);
 
-            if (rowAffects > 0)
+            if (rowAffects.MISACode == MISAEnum.IsValid)
             {
                 serviceResult.MISACode = MISAEnum.IsValid;
                 serviceResult.Messenger = "Cập nhật dữ liệu thành công";
@@ -317,12 +324,11 @@ namespace MISA.ApplicationCore
         /// <returns>Trả về trạng thái</returns>
         public ServiceResult DeleteCustomerById(Guid id)
         {
-            var customerContext = new CustomerContext();
             var serviceResult = new ServiceResult();
 
-            var rowAffects = customerContext.DeleteCustomerById(id);
+            var rowAffects = _customerRepository.DeleteCustomerById(id);
 
-            if(rowAffects > 0)
+            if(rowAffects.MISACode == MISAEnum.IsValid)
             {
                 serviceResult.MISACode = MISAEnum.IsValid;
                 serviceResult.Messenger = "Xóa bản ghi thành công!";
@@ -349,6 +355,38 @@ namespace MISA.ApplicationCore
                 return serviceResult;
             }
         }
+
+        public Customer GetCustomerByCode(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomerGroup GetCustomerGroupById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Customer GetCustomerGroupByPhone(string phoneNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Customer GetCustomerByEmail(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ServiceResult UpdateCustomer(Customer customer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ServiceResult DeleteCustomer(Guid customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
     }
 }

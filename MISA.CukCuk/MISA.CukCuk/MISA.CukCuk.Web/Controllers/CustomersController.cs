@@ -7,13 +7,15 @@ using Dapper;
 using System.Data;
 using MySql.Data.MySqlClient;
 using MISA.ApplicationCore;
-using MISA.Infrastructure.Model;
-using MISA.Entity;
+using MISA.ApplicationCore.Interfaces;
+using MISA.ApplicationCore.Entities;
+using MISA.ApplicationCore.Enums;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MISA.CukCuk.Web.Controllers
 {
+
     /// <summary>
     /// Api Danh mục khác hàng
     /// CreatedBy: PQ Huy (21/06/2021)
@@ -22,6 +24,15 @@ namespace MISA.CukCuk.Web.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
+        //Khởi tạo interface cho class
+        ICustomerService _customerService;
+
+        public CustomersController(ICustomerService customerService)
+        {
+            // Gán inter được định nghĩa
+            _customerService = customerService;
+        }
+
         /// <summary>
         /// Lấy toàn bộ danh sách khác hàng
         /// </summary>
@@ -30,11 +41,9 @@ namespace MISA.CukCuk.Web.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            // kết nối tới service
-            var customerService = new CustomerService();
 
             // gọi function lấy dữ liệu
-            var customers = customerService.GetCustomers();
+            var customers = _customerService.GetCustomers();
 
             //trả về dữ liệu
             return Ok(customers);
@@ -50,11 +59,9 @@ namespace MISA.CukCuk.Web.Controllers
         [HttpGet("filter")]
         public IActionResult GetCustomerById(Guid id)
         {
-            // kết nối tới service
-            var customerService = new CustomerService();
 
             // gọi function lấy dữ liệu
-            var customers = customerService.GetCustomerById(id);
+            var customers = _customerService.GetCustomerById(id);
 
             //trả về dữ liệu
             return Ok(customers);
@@ -69,11 +76,9 @@ namespace MISA.CukCuk.Web.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]Customer customer)
         {
-            // kết nối tới service
-            var customerService = new CustomerService();
 
             // gọi function lấy dữ liệu
-            var serviceResult = customerService.InsertCustomer(customer);
+            var serviceResult = _customerService.InsertCustomer(customer);
 
             //trả về dữ liệu
             if(serviceResult.MISACode == MISAEnum.NotValid)
@@ -100,11 +105,9 @@ namespace MISA.CukCuk.Web.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(Guid id, [FromBody] Customer customer)
         {
-            // kết nối tới service
-            var customerService = new CustomerService();
 
             // gọi function lấy dữ liệu
-            var serviceResult = customerService.UpdateCustomer(id, customer);
+            var serviceResult = _customerService.UpdateCustomer(id, customer);
 
             //trả về dữ liệu
             if (serviceResult.MISACode == MISAEnum.NotValid)
@@ -129,11 +132,9 @@ namespace MISA.CukCuk.Web.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(Guid id)
         {
-            // kết nối tới service
-            var customerService = new CustomerService();
 
             // gọi function lấy dữ liệu
-            var serviceResult = customerService.DeleteCustomerById(id);
+            var serviceResult = _customerService.DeleteCustomerById(id);
 
             //trả về dữ liệu
             if (serviceResult.MISACode == MISAEnum.NotValid)
