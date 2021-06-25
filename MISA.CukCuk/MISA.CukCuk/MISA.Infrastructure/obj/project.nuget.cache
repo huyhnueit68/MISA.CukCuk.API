@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "A2U0H95Fd3JxNW7iqEFE5qx4xcMCf1zD5hTLrc5+1/TAwNkXZQaHhdB/ihAdDTrmQTY6yb7JBuz7+VYJx2HIuQ==",
+  "dgSpecHash": "z3qd8kdTC0b1fiCpyVAQDVeKiv8fgjdFBlx2Aazh0BMI4E6aK51VDOZlCn7TpORKXiSGVzzxSlVxXJp125oorQ==",
   "success": true,
-  "projectFilePath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj",
+  "projectFilePath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\pqhuy\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
-    "C:\\Users\\pqhuy\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
-    "C:\\Users\\pqhuy\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
-    "C:\\Users\\pqhuy\\.nuget\\packages\\mysqlconnector\\1.3.10\\mysqlconnector.1.3.10.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\mysqlconnector\\1.3.10\\mysqlconnector.1.3.10.nupkg.sha512"
   ],
   "logs": []
 }

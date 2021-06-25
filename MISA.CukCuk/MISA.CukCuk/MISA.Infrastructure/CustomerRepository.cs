@@ -23,7 +23,7 @@ namespace MISA.Infrastructure
 
         public CustomerRepository(IConfiguration configuration)
         {
-            _configuration = _configuration;
+            _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
         }
@@ -32,12 +32,11 @@ namespace MISA.Infrastructure
         public ServiceResult DeleteCustomerById(Guid id)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var rowAffects = dbConnection.Execute("Proc_DeleteCustomerById", new { CustomerId = id }, commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
+            var rowAffects = _dbConnection.Execute("Proc_DeleteCustomerById", new { CustomerId = id }, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi xóa
             var serviceResult = new ServiceResult();
@@ -50,12 +49,11 @@ namespace MISA.Infrastructure
         public Customer GetCustomerByCode(string code)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var customer = dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = code }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            dbConnection.Close();
+            var customer = _dbConnection.Query<Customer>("Proc_GetCustomerByCode", new { CustomerCode = code }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi thêm mới
             return customer;
@@ -64,12 +62,11 @@ namespace MISA.Infrastructure
         public Customer GetCustomerByEmail(string email)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var resCustomerGroup = dbConnection.Query<Customer>("Proc_GetCustomerByEmail", new { Email = email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            dbConnection.Close();
+            var resCustomerGroup = _dbConnection.Query<Customer>("Proc_GetCustomerByEmail", new { Email = email }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi thêm mới
             return resCustomerGroup;
@@ -78,12 +75,11 @@ namespace MISA.Infrastructure
         public IEnumerable<Customer> GetCustomerById(Guid customerId)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var customers = dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
+            var customers = _dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
 
             //Trả về dữ liệu
             return customers;
@@ -92,12 +88,11 @@ namespace MISA.Infrastructure
         public CustomerGroup GetCustomerGroupById(Guid id)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var resCustomerGroup = dbConnection.Query<CustomerGroup>("Proc_GetCustomerGroupById", new { CustomerGroupId = id }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            dbConnection.Close();
+            var resCustomerGroup = _dbConnection.Query<CustomerGroup>("Proc_GetCustomerGroupById", new { CustomerGroupId = id }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi tương ứng
             return resCustomerGroup;
@@ -106,12 +101,11 @@ namespace MISA.Infrastructure
         public Customer GetCustomerByPhone(string phoneNumber)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var resCustomer = dbConnection.Query<Customer>("Proc_GetCustomerByPhoneNumber", new { PhoneNumber = phoneNumber }, commandType: CommandType.StoredProcedure).FirstOrDefault();
-            dbConnection.Close();
+            var resCustomer = _dbConnection.Query<Customer>("Proc_GetCustomerByPhoneNumber", new { PhoneNumber = phoneNumber }, commandType: CommandType.StoredProcedure).FirstOrDefault();
+            _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi thêm mới
             return resCustomer;
@@ -120,12 +114,11 @@ namespace MISA.Infrastructure
         public IEnumerable<Customer> GetCustomers()
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var customers = dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
+            var customers = _dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
 
             //Trả về dữ liệu
             return customers;
@@ -134,12 +127,12 @@ namespace MISA.Infrastructure
         public ServiceResult InsertCustomer(Customer customer)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var rowAffects = dbConnection.Execute("Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
+            var rowAffects = _dbConnection.Execute("Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
+
             var serviceResult = new ServiceResult();
             serviceResult.Data = rowAffects;
             serviceResult.MISACode = MISAEnum.IsValid;
@@ -151,11 +144,10 @@ namespace MISA.Infrastructure
         public ServiceResult UpdateCustomer(Guid id, Customer customer)
         {
             //kết nối database
-            IDbConnection dbConnection = new MySqlConnection(_connectionString);
-            dbConnection.Open();
+            _dbConnection.Open();
 
             //khởi tạo các commandText
-            var rowAffects = dbConnection.Execute("Proc_UpdateCustomer", new
+            var rowAffects = _dbConnection.Execute("Proc_UpdateCustomer", new
             {
                 CustomerId = id,
                 FullName = customer.FullName,
@@ -165,7 +157,7 @@ namespace MISA.Infrastructure
                 Email = customer.Email,
                 PhoneNumber = customer.PhoneNumber
             }, commandType: CommandType.StoredProcedure);
-            dbConnection.Close();
+            _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi thêm mới
             var serviceResult = new ServiceResult();
