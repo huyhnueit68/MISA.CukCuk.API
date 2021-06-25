@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using MISA.ApplicationCore.Entities;
 using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
@@ -14,11 +15,24 @@ namespace MISA.Infrastructure
 {
     public class CustomerRepository : ICustomerRepository
     {
+        #region DECLARE
+        IConfiguration _configuration;
+        string _connectionString = string.Empty;
+        IDbConnection _dbConnection = null;
+        #endregion
+
+        public CustomerRepository(IConfiguration configuration)
+        {
+            _configuration = _configuration;
+            _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
+            _dbConnection = new MySqlConnection(_connectionString);
+        }
+
+        #region Method
         public ServiceResult DeleteCustomerById(Guid id)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -36,8 +50,7 @@ namespace MISA.Infrastructure
         public Customer GetCustomerByCode(string code)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -51,8 +64,7 @@ namespace MISA.Infrastructure
         public Customer GetCustomerByEmail(string email)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -66,8 +78,7 @@ namespace MISA.Infrastructure
         public IEnumerable<Customer> GetCustomerById(Guid customerId)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -81,8 +92,7 @@ namespace MISA.Infrastructure
         public CustomerGroup GetCustomerGroupById(Guid id)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -96,8 +106,7 @@ namespace MISA.Infrastructure
         public Customer GetCustomerByPhone(string phoneNumber)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -111,8 +120,7 @@ namespace MISA.Infrastructure
         public IEnumerable<Customer> GetCustomers()
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -126,8 +134,7 @@ namespace MISA.Infrastructure
         public ServiceResult InsertCustomer(Customer customer)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -144,8 +151,7 @@ namespace MISA.Infrastructure
         public ServiceResult UpdateCustomer(Guid id, Customer customer)
         {
             //kết nối database
-            var connectionString = "User Id=dev;Host=47.241.69.179;Port=3306;Password=12345678;Database=MISACukCuk_Demo;Database=MISACukCuk_Demo;Character Set=utf8";
-            IDbConnection dbConnection = new MySqlConnection(connectionString);
+            IDbConnection dbConnection = new MySqlConnection(_connectionString);
             dbConnection.Open();
 
             //khởi tạo các commandText
@@ -169,5 +175,7 @@ namespace MISA.Infrastructure
 
             return serviceResult;
         }
+
+        #endregion
     }
 }

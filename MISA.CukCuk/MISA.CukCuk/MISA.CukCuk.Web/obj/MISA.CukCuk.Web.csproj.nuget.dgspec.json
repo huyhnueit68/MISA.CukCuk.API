@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj": {}
+    "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj": {}
   },
   "projects": {
-    "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
+    "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+        "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
         "projectName": "MISA.ApplicationCore",
-        "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
+        "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+        "packagesPath": "C:\\Users\\pqhuy\\.nuget\\packages\\",
+        "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pqhuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -54,21 +54,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj": {
+    "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
+        "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
         "projectName": "MISA.CukCuk.Web",
-        "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\obj\\",
+        "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\MISA.CukCuk.Web.csproj",
+        "packagesPath": "C:\\Users\\pqhuy\\.nuget\\packages\\",
+        "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.CukCuk.Web\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pqhuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -82,11 +82,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
-                "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj"
+              "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
+                "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj"
               },
-              "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {
-                "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj"
+              "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {
+                "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj"
               }
             }
           }
@@ -132,21 +132,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {
+    "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj",
+        "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj",
         "projectName": "MISA.Infrastructure",
-        "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\obj\\",
+        "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\MISA.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\pqhuy\\.nuget\\packages\\",
+        "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\pqhuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -160,8 +160,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
-                "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj"
+              "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj": {
+                "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj"
               }
             }
           }
@@ -179,6 +179,10 @@
             "Dapper": {
               "target": "Package",
               "version": "[2.0.90, )"
+            },
+            "Microsoft.Extensions.Configuration.Abstractions": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             },
             "MySqlConnector": {
               "target": "Package",
@@ -200,7 +204,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }
