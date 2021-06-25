@@ -119,7 +119,7 @@ namespace MISA.Infrastructure
             //khởi tạo các commandText
             var customers = _dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);
             _dbConnection.Close();
-
+                
             //Trả về dữ liệu
             return customers;
         }

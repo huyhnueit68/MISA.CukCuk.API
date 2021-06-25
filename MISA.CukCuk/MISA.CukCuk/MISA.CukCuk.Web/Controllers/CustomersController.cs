@@ -41,7 +41,6 @@ namespace MISA.CukCuk.Web.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-
             // gọi function lấy dữ liệu
             var customers = _customerService.GetCustomers();
 

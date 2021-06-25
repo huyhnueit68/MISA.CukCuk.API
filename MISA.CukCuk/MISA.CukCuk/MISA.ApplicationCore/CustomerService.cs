@@ -286,7 +286,6 @@ namespace MISA.ApplicationCore
                 }
             }
             
-
             //cập nhật dữ liệu khi validate thành công
             var rowAffects = _customerRepository.UpdateCustomer(id, customer);
 
