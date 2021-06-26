@@ -24,15 +24,20 @@ namespace MISA.CukCuk.Web.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
+        #region DECLARE
         //Khởi tạo interface cho class
         ICustomerService _customerService;
+        #endregion
 
+        #region Contructor
         public CustomersController(ICustomerService customerService)
         {
             // Gán inter được định nghĩa
             _customerService = customerService;
         }
+        #endregion
 
+        #region Method
         /// <summary>
         /// Lấy toàn bộ danh sách khác hàng
         /// </summary>
@@ -150,5 +155,6 @@ namespace MISA.CukCuk.Web.Controllers
             }
 
         }
+        #endregion
     }
 }

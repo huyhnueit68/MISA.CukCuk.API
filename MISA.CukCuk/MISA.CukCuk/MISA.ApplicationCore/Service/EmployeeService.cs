@@ -10,13 +10,18 @@ namespace MISA.ApplicationCore
 {
     public class EmployeeService : IEmployeeService
     {
+        #region DECLARE
         IEmployeeRepository _employeeRepository;
+        #endregion
 
+        #region Contructor
         public EmployeeService(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
+        #endregion
 
+        #region Method
         public IEnumerable<Employee> GetEmployees()
         {
             return _employeeRepository.GetEmployees();
@@ -48,5 +53,6 @@ namespace MISA.ApplicationCore
             // Trả về trạng thái khi xóa nhân viên thành công
             return _employeeRepository.DeleteEmployeeById(id);
         }
+        #endregion
     }
 }

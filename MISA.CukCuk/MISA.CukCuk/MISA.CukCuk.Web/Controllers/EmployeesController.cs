@@ -14,13 +14,18 @@ namespace MISA.CukCuk.Web.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
+        #region DECLARE
         IEmployeeService _employeeService;
+        #endregion
 
+        #region Contructor
         public EmployeesController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
+        #endregion
 
+        #region Method
         /// <summary>
         /// Lấy toàn bộ dữ liệu nhân viên
         /// </summary>
@@ -70,4 +75,5 @@ namespace MISA.CukCuk.Web.Controllers
         {
         }
     }
+    #endregion
 }

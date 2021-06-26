@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using MISA.ApplicationCore.Entities;
+using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
 using MySqlConnector;
 using System;
@@ -17,38 +19,100 @@ namespace MISA.Infrastructure
         IConfiguration _configuration;
         string _connectionString = string.Empty;
         IDbConnection _dbConnection = null;
+        string _tableName = string.Empty;
         #endregion
 
+        #region Contructor
         public BaseRepository(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
+            _tableName = typeof(Generic).Name;
         }
+        #endregion
 
+        #region Method
         public IEnumerable<Generic> Get()
         {
-            throw new NotImplementedException();
+            // kết nối database
+            _dbConnection.Open();
+
+            //khởi tạo và thực thi các commandText
+            var resEmployees = _dbConnection.Query<Generic>($"Proc_Get{_tableName}", commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
+
+            //Trả về dữ liệu kết quả
+            return resEmployees;
         }
 
         public IEnumerable<Generic> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            //kết nối database
+            _dbConnection.Open();
+
+            //khởi tạo các commandText
+            var customers = _dbConnection.Query<Generic>($"Proc_Get{_tableName}ById", id, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
+
+            //Trả về dữ liệu
+            return customers;
         }
 
         public ServiceResult Insert(Generic data)
         {
-            throw new NotImplementedException();
+            var serviceResult = new ServiceResult();
+
+            //kết nối database
+            _dbConnection.Open();
+
+            //khởi tạo các commandText
+            var rowAffects = _dbConnection.Execute($"Proc_Insert{_tableName}", data, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
+
+            serviceResult.Data = rowAffects;
+            serviceResult.MISACode = MISAEnum.IsValid;
+            serviceResult.Messenger = "Thêm mới thành công";
+
+            //Trả về dữ liệu số bản ghi thêm mới
+            return serviceResult;
         }
 
         public ServiceResult Update(Guid id, Generic data)
         {
-            throw new NotImplementedException();
+            var serviceResult = new ServiceResult();
+
+            //kết nối database
+            _dbConnection.Open();
+
+            //khởi tạo các commandText
+            var rowAffects = _dbConnection.Execute($"Proc_Update{_tableName}", data, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
+
+            //Trả về dữ liệu số bản ghi thêm mới
+            serviceResult.Data = rowAffects;
+            serviceResult.MISACode = MISAEnum.IsValid;
+            serviceResult.Messenger = "Cập nhật thành công";
+
+            return serviceResult;
         }
 
         public ServiceResult DeleteById(Guid id)
         {
-            throw new NotImplementedException();
+            //kết nối database
+            _dbConnection.Open();
+
+            //khởi tạo các commandText
+            var rowAffects = _dbConnection.Execute($"Proc_Delete{_tableName}ById", id, commandType: CommandType.StoredProcedure);
+            _dbConnection.Close();
+
+            //Trả về dữ liệu số bản ghi xóa
+            var serviceResult = new ServiceResult();
+            serviceResult.Data = rowAffects;
+            serviceResult.MISACode = MISAEnum.IsValid;
+            serviceResult.Messenger = "Cập nhật thành công";
+            return serviceResult;
         }
+        #endregion
     }
 }

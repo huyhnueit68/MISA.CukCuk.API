@@ -21,12 +21,14 @@ namespace MISA.Infrastructure
         IDbConnection _dbConnection = null;
         #endregion
 
+        #region Contructor
         public CustomerRepository(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
         }
+        #endregion
 
         #region Method
         public ServiceResult DeleteCustomerById(Guid id)

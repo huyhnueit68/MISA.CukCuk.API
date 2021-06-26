@@ -21,13 +21,16 @@ namespace MISA.Infrastructure
         IDbConnection _dbConnection = null;
         #endregion
 
+        #region Contructor
         public EmployeeRepository(IConfiguration configuration)
         {
             _configuration = configuration;
             _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
             _dbConnection = new MySqlConnection(_connectionString);
         }
+        #endregion
 
+        #region Method
         public IEnumerable<Employee> GetEmployees()
         {
             // kết nối database
@@ -120,6 +123,6 @@ namespace MISA.Infrastructure
             //Trả về dữ liệu số bản ghi thêm mới
             return serviceResult;
         }
-
+        #endregion
     }
 }

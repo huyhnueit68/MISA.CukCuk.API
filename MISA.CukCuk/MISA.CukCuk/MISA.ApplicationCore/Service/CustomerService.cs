@@ -11,7 +11,9 @@ namespace MISA.ApplicationCore
 {
     public class CustomerService : ICustomerService
     {
+        #region DECLARE
         ICustomerRepository _customerRepository;
+        #endregion
 
         #region Construct
         /// <summary>
@@ -25,6 +27,7 @@ namespace MISA.ApplicationCore
         }
 
         #endregion
+
         #region Method
         /// <summary>
         /// Lấy danh sách khàng
