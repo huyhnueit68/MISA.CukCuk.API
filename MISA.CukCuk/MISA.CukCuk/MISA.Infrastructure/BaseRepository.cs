@@ -39,7 +39,7 @@ namespace MISA.Infrastructure
             _dbConnection.Open();
 
             //khởi tạo và thực thi các commandText
-            var resEmployees = _dbConnection.Query<Generic>($"Proc_Get{_tableName}", commandType: CommandType.StoredProcedure);
+            var resEmployees = _dbConnection.Query<Generic>($"Proc_Get{_tableName}s", commandType: CommandType.StoredProcedure);
             _dbConnection.Close();
 
             //Trả về dữ liệu kết quả
@@ -52,17 +52,18 @@ namespace MISA.Infrastructure
             _dbConnection.Open();
 
             //khởi tạo các commandText
-            var customers = _dbConnection.Query<Generic>($"Proc_Get{_tableName}ById", id, commandType: CommandType.StoredProcedure);
+            var parameterId = new DynamicParameters();
+            parameterId.Add($"@{_tableName}Id", id);
+
+            var data = _dbConnection.Query<Generic>($"Proc_Get{_tableName}ById", parameterId, commandType: CommandType.StoredProcedure);
             _dbConnection.Close();
 
             //Trả về dữ liệu
-            return customers;
+            return data;
         }
 
         public ServiceResult Insert(Generic data)
         {
-            var serviceResult = new ServiceResult();
-
             //kết nối database
             _dbConnection.Open();
 
@@ -70,10 +71,10 @@ namespace MISA.Infrastructure
             var rowAffects = _dbConnection.Execute($"Proc_Insert{_tableName}", data, commandType: CommandType.StoredProcedure);
             _dbConnection.Close();
 
+            var serviceResult = new ServiceResult();
             serviceResult.Data = rowAffects;
             serviceResult.MISACode = MISAEnum.IsValid;
             serviceResult.Messenger = "Thêm mới thành công";
-
             //Trả về dữ liệu số bản ghi thêm mới
             return serviceResult;
         }
@@ -86,7 +87,9 @@ namespace MISA.Infrastructure
             _dbConnection.Open();
 
             //khởi tạo các commandText
-            var rowAffects = _dbConnection.Execute($"Proc_Update{_tableName}", data, commandType: CommandType.StoredProcedure);
+            var parameter = MappingDbType(data);
+
+            var rowAffects = _dbConnection.Execute($"Proc_Update{_tableName}", parameter, commandType: CommandType.StoredProcedure);
             _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi thêm mới
@@ -103,7 +106,10 @@ namespace MISA.Infrastructure
             _dbConnection.Open();
 
             //khởi tạo các commandText
-            var rowAffects = _dbConnection.Execute($"Proc_Delete{_tableName}ById", id, commandType: CommandType.StoredProcedure);
+            var parameterId = new DynamicParameters();
+            parameterId.Add($"@{_tableName}Id", id);
+
+            var rowAffects = _dbConnection.Execute($"Proc_Delete{_tableName}ById", parameterId, commandType: CommandType.StoredProcedure);
             _dbConnection.Close();
 
             //Trả về dữ liệu số bản ghi xóa
@@ -112,6 +118,28 @@ namespace MISA.Infrastructure
             serviceResult.MISACode = MISAEnum.IsValid;
             serviceResult.Messenger = "Cập nhật thành công";
             return serviceResult;
+        }
+
+        protected DynamicParameters MappingDbType<Generic>(Generic generic)
+        {
+            var properties = generic.GetType().GetProperties();
+            var parameters = new DynamicParameters();
+            foreach (var property in properties)
+            {
+                var propertyName = property.Name;
+                var propertyValue = property.GetValue(generic);
+                var propertyType = property.PropertyType;
+                if (propertyType == typeof(Guid) || propertyType == typeof(Guid?))
+                {
+                    parameters.Add($"@{propertyName}", propertyValue, DbType.String);
+                }
+                else
+                {
+                    parameters.Add($"@{propertyName}", propertyValue);
+                }
+            }
+
+            return parameters;
         }
         #endregion
     }

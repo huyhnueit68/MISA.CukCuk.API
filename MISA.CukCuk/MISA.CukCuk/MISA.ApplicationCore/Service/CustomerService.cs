@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using MISA.ApplicationCore.Entities;
 using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
+using MISA.ApplicationCore.Service;
 
 namespace MISA.ApplicationCore
 {
-    public class CustomerService : ICustomerService
+    public class CustomerService : BaseService<Customer>, ICustomerService
     {
         #region DECLARE
         ICustomerRepository _customerRepository;
@@ -356,6 +357,16 @@ namespace MISA.ApplicationCore
 
                 return serviceResult;
             }
+        }
+
+        public IEnumerable<Customer> GetCustomerByCode(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Customer> GetCustomerPaging(int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

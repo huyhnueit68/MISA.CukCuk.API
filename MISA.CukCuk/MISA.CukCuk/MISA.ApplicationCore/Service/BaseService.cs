@@ -34,7 +34,7 @@ namespace MISA.ApplicationCore.Service
 
         public ServiceResult Insert(Generic data)
         {
-            return Insert(data);
+            return _baseRepository.Insert(data);
         }
 
         public ServiceResult Update(Guid id, Generic data)

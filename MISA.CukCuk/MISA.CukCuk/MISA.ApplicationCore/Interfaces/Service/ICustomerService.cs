@@ -7,45 +7,23 @@ using System.Threading.Tasks;
 
 namespace MISA.ApplicationCore.Interfaces
 {
-    public interface ICustomerService
+    public interface ICustomerService : IBaseService<Customer>
     {
         /// <summary>
-        /// Lấy toàn bộ danh sách khách hàng
+        /// Lấy dữ liệu khách hàng theo mã code khách hàng
         /// </summary>
-        /// <returns> Trả về danh sách khách hàng </returns>
-        /// CreatedBy: PQ Huy (24/06/2021)
-        IEnumerable<Customer> GetCustomers();
+        /// <param name="code">Mã code khách hàng</param>
+        /// <returns>Lấy danh sách khách hàng theo code</returns>
+        /// CreatedBy: PQ Huy (26.06.2021)
+        IEnumerable<Customer> GetCustomerByCode(string code);
 
         /// <summary>
-        /// Lấy thông tin khách hàng theo mã
+        /// Phân trang dữ liệu
         /// </summary>
-        /// <param name="customerId"> Mã khách hàng</param>
+        /// <param name="pageNumber">Index của page hiện tại</param>
+        /// <param name="pageSize">Kích thước mỗi page</param>
         /// <returns></returns>
-        /// CreatedBy: PQ Huy (24/06/2021)
-        IEnumerable<Customer> GetCustomerById(Guid customerId);
-
-        /// <summary>
-        /// Thêm mới khách hàng
-        /// </summary>
-        /// <param name="customer">Dữ liệu khách hàng</param>
-        /// <returns>Trả về số bản ghi được thêm</returns>
-        /// CreatedBy: PQ Huy (24/06/2021)
-        ServiceResult InsertCustomer(Customer customer);
-
-        /// <summary>
-        /// Sửa thông tin khách hàng
-        /// </summary>
-        /// <param name="id">Mã khách hàng</param>
-        /// <param name="customer">Dữ liệu khách hàng cần sửa</param>
-        /// <returns>Trả về trạng thái cập nhật dữ liệu</returns>
-        ServiceResult UpdateCustomer(Guid id, Customer customer);
-
-        /// <summary>
-        /// Xóa thông tin khách hàng theo khóa chính
-        /// </summary>
-        /// <param name="id">Mã khách hàng</param>
-        /// <returns>Trả về thạng thái cập nhật danh sách khách hàng</returns>
-        /// CreatedBy: PQ Huy (24.06.2021)
-        ServiceResult DeleteCustomerById(Guid customerId);
+        /// CreatedBy: PQ Huy (26.06.2021)
+        IEnumerable<Customer> GetCustomerPaging(int pageNumber, int pageSize);
     }
 }
