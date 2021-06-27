@@ -18,8 +18,8 @@ namespace MISA.Infrastructure
         #region DECLARE
         IConfiguration _configuration;
         string _connectionString = string.Empty;
-        IDbConnection _dbConnection = null;
-        string _tableName = string.Empty;
+        protected IDbConnection _dbConnection = null;
+        protected string _tableName = string.Empty;
         #endregion
 
         #region Contructor
@@ -141,6 +141,17 @@ namespace MISA.Infrastructure
 
             return parameters;
         }
+
+        public IEnumerable<Generic> GetEntityByProperty(string propertyName, object propertyValue)
+        {
+            _dbConnection.Open();
+            var query = $"SELECT * FROM {_tableName} WHERE {propertyName} = @'{propertyValue}'";
+            var entity = _dbConnection.Query<Generic>(query, commandType: CommandType.Text);
+
+            return entity;
+        }
+
+
         #endregion
     }
 }

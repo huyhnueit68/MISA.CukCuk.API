@@ -133,3 +133,4 @@ C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\
 C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\MISA.ApplicationCore.pdb
 C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\MISA.Infrastructure.pdb
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\MySQLConnection.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\MySQLConnection.dll

@@ -25,13 +25,13 @@ namespace MISA.CukCuk.Web.Controllers
     public class CustomersController : BaseEntityController<Customer>
     {
         #region DECLARE
-        IBaseService<Customer> _baseService;
+        ICustomerService _customerService;
         #endregion
 
         #region Contructor
-        public CustomersController(IBaseService<Customer> baseService) : base(baseService)
+        public CustomersController(ICustomerService customerService) : base(customerService)
         {
-            _baseService = baseService;
+            _customerService = customerService;
         }
         #endregion
 

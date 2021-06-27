@@ -13,40 +13,20 @@ using System.Threading.Tasks;
 
 namespace MISA.Infrastructure
 {
-    public class CustomerRepository : ICustomerRepository
+    public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
     {
         #region DECLARE
-        IConfiguration _configuration;
-        string _connectionString = string.Empty;
-        IDbConnection _dbConnection = null;
+
         #endregion
 
         #region Contructor
-        public CustomerRepository(IConfiguration configuration)
+        public CustomerRepository(IConfiguration configuration) : base (configuration)
         {
-            _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("MISACukCukConnectionString");
-            _dbConnection = new MySqlConnection(_connectionString);
+
         }
         #endregion
 
         #region Method
-        public ServiceResult DeleteCustomerById(Guid id)
-        {
-            //kết nối database
-            _dbConnection.Open();
-
-            //khởi tạo các commandText
-            var rowAffects = _dbConnection.Execute("Proc_DeleteCustomerById", new { CustomerId = id }, commandType: CommandType.StoredProcedure);
-            _dbConnection.Close();
-
-            //Trả về dữ liệu số bản ghi xóa
-            var serviceResult = new ServiceResult();
-            serviceResult.Data = rowAffects;
-            serviceResult.MISACode = MISAEnum.IsValid;
-            serviceResult.Messenger = "Cập nhật thành công";
-            return serviceResult;
-        }
 
         public Customer GetCustomerByCode(string code)
         {
@@ -74,19 +54,6 @@ namespace MISA.Infrastructure
             return resCustomerGroup;
         }
 
-        public IEnumerable<Customer> GetCustomerById(Guid customerId)
-        {
-            //kết nối database
-            _dbConnection.Open();
-
-            //khởi tạo các commandText
-            var customers = _dbConnection.Query<Customer>("Proc_GetCustomerById", new { CustomerId = customerId }, commandType: CommandType.StoredProcedure);
-            _dbConnection.Close();
-
-            //Trả về dữ liệu
-            return customers;
-        }
-
         public CustomerGroup GetCustomerGroupById(Guid id)
         {
             //kết nối database
@@ -111,63 +78,6 @@ namespace MISA.Infrastructure
 
             //Trả về dữ liệu số bản ghi thêm mới
             return resCustomer;
-        }
-
-        public IEnumerable<Customer> GetCustomers()
-        {
-            //kết nối database
-            _dbConnection.Open();
-
-            //khởi tạo các commandText
-            var customers = _dbConnection.Query<Customer>("Proc_GetCustomers", commandType: CommandType.StoredProcedure);
-            _dbConnection.Close();
-                
-            //Trả về dữ liệu
-            return customers;
-        }
-
-        public ServiceResult InsertCustomer(Customer customer)
-        {
-            //kết nối database
-            _dbConnection.Open();
-
-            //khởi tạo các commandText
-            var rowAffects = _dbConnection.Execute("Proc_InsertCustomer", customer, commandType: CommandType.StoredProcedure);
-            _dbConnection.Close();
-
-            var serviceResult = new ServiceResult();
-            serviceResult.Data = rowAffects;
-            serviceResult.MISACode = MISAEnum.IsValid;
-            serviceResult.Messenger = "Thêm mới thành công";
-            //Trả về dữ liệu số bản ghi thêm mới
-            return serviceResult;
-        }
-
-        public ServiceResult UpdateCustomer(Guid id, Customer customer)
-        {
-            //kết nối database
-            _dbConnection.Open();
-
-            //khởi tạo các commandText
-            var rowAffects = _dbConnection.Execute("Proc_UpdateCustomer", new
-            {
-                CustomerId = id,
-                FullName = customer.FullName,
-                CustomerGroupId = customer.CustomerGroupId,
-                DateOfBirth = customer.DateOfBirth,
-                Gender = customer.Gender,
-                Email = customer.Email,
-                PhoneNumber = customer.PhoneNumber
-            }, commandType: CommandType.StoredProcedure);
-            _dbConnection.Close();
-
-            //Trả về dữ liệu số bản ghi thêm mới
-            var serviceResult = new ServiceResult();
-            serviceResult.Data = rowAffects;
-            serviceResult.MISACode = MISAEnum.IsValid;
-            serviceResult.Messenger = "Cập nhật thành công";
-
-            return serviceResult;
         }
 
         #endregion

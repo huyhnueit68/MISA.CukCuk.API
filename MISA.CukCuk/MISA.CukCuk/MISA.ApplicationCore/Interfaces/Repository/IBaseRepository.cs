@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,5 +48,12 @@ namespace MISA.ApplicationCore.Interfaces
         /// <returns>Trả về thạng thái cập nhật danh sách bản ghi</returns>
         /// CreatedBy: PQ Huy (25.06.2021)
         ServiceResult DeleteById(Guid id);
+
+        /// <summary>
+        /// Lấy dữ liệu theo một tiêu chí
+        /// </summary>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        IEnumerable<Generic> GetEntityByProperty(string propertyName, object propertyValue);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MISA.ApplicationCore.Entities;
+using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -32,9 +33,35 @@ namespace MISA.ApplicationCore.Service
             return _baseRepository.GetById(id);
         }
 
-        public ServiceResult Insert(Generic data)
+        public virtual ServiceResult Insert(Generic data)
         {
-            return _baseRepository.Insert(data);
+            var serviceResult = new ServiceResult();
+
+            // validate require
+            var isValid = Validate(data);
+
+            if(isValid)
+            {
+                return _baseRepository.Insert(data);
+            } else
+            {
+                var msg = new
+                {
+                    devMsg = new
+                    {
+                        fieldName = "CustomerCode",
+                        msg = "Validate error",
+                        Code = "900"
+                    },
+                    userMsg = "Validate error",
+                };
+
+                serviceResult.MISACode = MISAEnum.NotValid;
+                serviceResult.Messenger = "Validate error";
+                serviceResult.Data = msg;
+
+                return serviceResult;
+            }
         }
 
         public ServiceResult Update(Guid id, Generic data)
@@ -45,6 +72,38 @@ namespace MISA.ApplicationCore.Service
         public ServiceResult DeleteById(Guid id)
         {
             return _baseRepository.DeleteById(id);
+        }
+
+        private bool Validate(Generic data)
+        {
+            var isValid = true; 
+            // Get all property:
+            var properties = data.GetType().GetProperties();
+
+            foreach(var property in properties)
+            {
+                // check attribute need validate
+                if(property.IsDefined(typeof(Required), false))
+                {
+                    // check required
+                    var propertyValue = property.GetValue(data);
+                    if(propertyValue == null)
+                    {
+                        isValid = false;
+                    }
+                } else if ( property.IsDefined(typeof(CheckDuplicate), false))
+                {
+                    // check duplicate data
+                    var valueDuplicate = _baseRepository.GetEntityByProperty(property.Name, property.GetValue(data));
+                    if(valueDuplicate != null)
+                    {
+                        isValid = false;
+                    } 
+                }
+            }
+
+            return isValid;
+
         }
         #endregion
     }

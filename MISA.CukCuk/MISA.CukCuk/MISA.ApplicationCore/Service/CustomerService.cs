@@ -22,59 +22,32 @@ namespace MISA.ApplicationCore
         /// </summary>
         /// <param name="customerRepository"></param>
         /// CreatedBy: PQ Huy (24.06.2021)
-        public CustomerService(ICustomerRepository customerRepository)
+        public CustomerService(ICustomerRepository customerRepository) : base(customerRepository)
         {
             _customerRepository = customerRepository;
         }
 
-        #endregion
+        #endregion 
 
         #region Method
-        /// <summary>
-        /// Lấy danh sách khàng
-        /// </summary>
-        /// <returns>Trả về danh sách khách hàng</returns>
-        /// CreatedBy: PQ Huy (24/06/2021)
-        public IEnumerable<Customer> GetCustomers()
-        { 
-            var customers = _customerRepository.GetCustomers();
 
-            return customers;
-        }
-
-        /// <summary>
-        /// Lấy mã khách hàng theo id
-        /// </summary>
-        ///  <param name="id">Mã khách hàng</param>
-        /// <returns> Trả về khách hàng</returns>
-        /// CreatedBy: PQ Huy (24/06/2021)
-        public IEnumerable<Customer> GetCustomerById(Guid id)
-        {
-            var customers = _customerRepository.GetCustomerById(id);
-
-            return customers;
-        }
-
-        /// <summary>
-        /// Thêm mới khách hàng
-        /// </summary>
-        /// <param name="customer">Dữ liệu khách hàng</param>
-        /// <returns>Khách hàng vừa thêm thành cồng</returns>
-        /// CreatedBy: PQ Huy (24/06/2021)
-        public ServiceResult InsertCustomer(Customer customer)
+        public override ServiceResult Insert(Customer customer)
         {
             var serviceResult = new ServiceResult();
 
             // validate data
-            // validate field not null, trả về lỗi khi validate
+            var isValid = true;
+
+            // 1. validate field not null, trả về lỗi khi validate
             if (string.IsNullOrEmpty(customer.CustomerCode))
             {
+                isValid = false;
                 var msg = new
                 {
                     devMsg = new
                     {
                         fieldName = "CustomerCode",
-                        msg = "",
+                        msg = "Mã khách hàng không được phép để trống",
                         Code = "900"
                     },
                     userMsg = "Mã khách hàng không được phép để trống",
@@ -85,219 +58,36 @@ namespace MISA.ApplicationCore
                 serviceResult.Data = msg;
 
                 return serviceResult;
-            } 
+            }
 
-            // validate duplicate code
-            var res = _customerRepository.GetCustomerByCode(customer.CustomerCode);
-            if (res != null)
+            // 2. validate dupicate code
+            var customerDuplicate = _customerRepository.GetCustomerByCode(customer.CustomerCode);
+            if(customerDuplicate != null)
             {
+                isValid = false;
+
                 var msg = new
                 {
                     devMsg = new
                     {
                         fieldName = "CustomerCode",
-                        msg = "Mã khách hàng đã tồn tại",
+                        msg = "Mã khách hàng " + customer.CustomerCode + " đã tồn tại",
                         Code = "900"
                     },
-                    userMsg = "Mã khách hàng đã tồn tại",
+                    userMsg = "Mã khách hàng " + customer.CustomerCode + " đã tồn tại",
                 };
+
                 serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Mã khách hàng đã tồn tại";
+                serviceResult.Messenger = "Mã khách hàng " + customer.CustomerCode + " đã tồn tại";
                 serviceResult.Data = msg;
 
                 return serviceResult;
             }
 
-            // validate customer group id
-            var resCustomerGroup = _customerRepository.GetCustomerGroupById((Guid)customer.CustomerGroupId);
-            if (resCustomerGroup == null)
+            // logic validate:
+            if (isValid)
             {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerGroupId",
-                        msg = "Không tồn tại mã nhóm",
-                        Code = "401"
-                    },
-                    userMsg = "Không tồn tại mã nhóm",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Mã khách hàng đã tồn tại";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
-            // validate phone number
-            var resPhoneNumber = _customerRepository.GetCustomerByPhone(customer.PhoneNumber);
-            if (resPhoneNumber != null)
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "PhoneNumber",
-                        msg = "Số điện thoại đã tồn tại",
-                        Code = "401"
-                    },
-                    userMsg = "Số điện thoại đã tồn tại",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Số điện thoại đã tồn tại";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
-            // validate email
-            var resEmail = _customerRepository.GetCustomerByEmail(customer.Email);
-            if (resEmail != null)
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "Email",
-                        msg = "Email đã tồn tại",
-                        Code = "401"
-                    },
-                    userMsg = "Email đã tồn tại",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Email đã tồn tại";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
-
-            // thêm mới khi validate thành công
-            var rowAffects = _customerRepository.InsertCustomer(customer);
-
-            serviceResult.MISACode = MISAEnum.IsValid;
-            serviceResult.Messenger = "Thêm dữ liệu thành công";
-            serviceResult.Data = rowAffects;
-
-            return serviceResult;
-        }
-
-        /// <summary>
-        /// Sửa thông tin khách hàng
-        /// </summary>
-        /// <param name="id">Mã khách hàng cần sửa</param>
-        /// <param name="customer">Thông tin sửa khách hàng</param>
-        /// <returns>Trả về trạng thái bản ghi cập nhật</returns>
-        public ServiceResult UpdateCustomer(Guid id, Customer customer)
-        {
-            var serviceResult = new ServiceResult();
-
-            // validate dữ liệu
-            var oldCustomerCode = _customerRepository.GetCustomerById(id);
-
-            //validate code
-            if (oldCustomerCode.ToArray()[0].CustomerCode != customer.CustomerCode)
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Vui lòng không thay đổi mã khách hàng",
-                        Code = "401"
-                    },
-                    userMsg = "Vui lòng không thay đổi mã khách hàng",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Vui lòng không thay đổi mã khách hàng";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
-            // validate customer group id
-            var resCustomerGroup = _customerRepository.GetCustomerGroupById((Guid)customer.CustomerGroupId);
-            if (resCustomerGroup == null)
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerGroupId",
-                        msg = "Không tồn tại mã nhóm",
-                        Code = "401"
-                    },
-                    userMsg = "Không tồn tại mã nhóm",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Mã khách hàng đã tồn tại";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
-            // validate phone number
-            if(oldCustomerCode.ToArray()[0].PhoneNumber != customer.PhoneNumber)
-            {
-                var resPhoneNumber = _customerRepository.GetCustomerByPhone(customer.PhoneNumber);
-                if (resPhoneNumber != null)
-                {
-                    var msg = new
-                    {
-                        devMsg = new
-                        {
-                            fieldName = "PhoneNumber",
-                            msg = "Số điện thoại đã tồn tại",
-                            Code = "401"
-                        },
-                        userMsg = "Số điện thoại đã tồn tại",
-                    };
-
-                    serviceResult.MISACode = MISAEnum.NotValid;
-                    serviceResult.Messenger = "Số điện thoại đã tồn tại";
-                    serviceResult.Data = msg;
-
-                    return serviceResult;
-                }
-            }
-
-            // validate email
-            if(oldCustomerCode.ToArray()[0].Email != customer.Email) {
-                var resEmail = _customerRepository.GetCustomerByEmail(customer.Email);
-                if (resEmail != null)
-                {
-                    var msg = new
-                    {
-                        devMsg = new
-                        {
-                            fieldName = "Email",
-                            msg = "Email đã tồn tại",
-                            Code = "401"
-                        },
-                        userMsg = "Email đã tồn tại",
-                    };
-
-                    serviceResult.MISACode = MISAEnum.NotValid;
-                    serviceResult.Messenger = "Email đã tồn tại";
-                    serviceResult.Data = msg;
-
-                    return serviceResult;
-                }
-            }
-            
-            //cập nhật dữ liệu khi validate thành công
-            var rowAffects = _customerRepository.UpdateCustomer(id, customer);
-
-            if (rowAffects.MISACode == MISAEnum.IsValid)
-            {
-                serviceResult.MISACode = MISAEnum.IsValid;
-                serviceResult.Messenger = "Cập nhật dữ liệu thành công";
-                serviceResult.Data = rowAffects;
+                return base.Insert(customer);
             }
             else
             {
@@ -305,65 +95,39 @@ namespace MISA.ApplicationCore
                 {
                     devMsg = new
                     {
-                        fieldName = " ",
-                        msg = "Đã có lỗi xảy ra, vui lòng thử lại sau",
-                        Code = "501"
+                        fieldName = "",
+                        msg = "Validate Error",
+                        Code = "900"
                     },
-                    userMsg = "VĐã có lỗi xảy ra, vui lòng thử lại sau",
+                    userMsg = "Validate Error",
                 };
 
                 serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Đã có lỗi xảy ra, vui lòng thử lại sau";
+                serviceResult.Messenger = "Validate Error";
                 serviceResult.Data = msg;
-            }
 
-            return serviceResult;
+                return serviceResult;
+            }
         }
+
 
         /// <summary>
-        /// Xóa thông tin khách hàng
+        /// Lấy ra khách hàng theo mã khách hàng
         /// </summary>
-        /// <param name="id">Mã khách hàng</param>
-        /// <returns>Trả về trạng thái</returns>
-        public ServiceResult DeleteCustomerById(Guid id)
-        {
-            var serviceResult = new ServiceResult();
-
-            var rowAffects = _customerRepository.DeleteCustomerById(id);
-
-            if(rowAffects.MISACode == MISAEnum.IsValid)
-            {
-                serviceResult.MISACode = MISAEnum.IsValid;
-                serviceResult.Messenger = "Xóa bản ghi thành công!";
-                serviceResult.Data = rowAffects;
-
-                return serviceResult;
-            } else
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "",
-                        msg = "Xóa dữ liệu thất bại, vui lòng thử lại sau",
-                        Code = "500"
-                    },
-                    userMsg = "Xóa dữ liệu thất bại, vui lòng thử lại sau",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Xóa dữ liệu thất bại, vui lòng thử lại sau";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-        }
-
+        /// <param name="code">Mã khách hàng</param>
+        /// <returns>Trả về khách hàng</returns>
+        /// CreatedBy: PQ Huy (26.06.2021)
         public IEnumerable<Customer> GetCustomerByCode(string code)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public IEnumerable<Customer> GetCustomerPaging(int pageNumber, int pageSize)
         {
             throw new NotImplementedException();
