@@ -146,7 +146,6 @@ namespace MISA.Infrastructure
         public IEnumerable<Generic> GetEntityByProperty(Generic generic, PropertyInfo property)
         {
              
-
             // connection database
             _dbConnection.Open();
 
@@ -155,7 +154,6 @@ namespace MISA.Infrastructure
             var propertyValue = property.GetValue(generic);
             var keyValue = generic.GetType().GetProperty($"{_tableName}Id").GetValue(generic);
             var query = "";
-            
 
             // check state action 
             if (generic.EntityState == EntityState.AddNew)

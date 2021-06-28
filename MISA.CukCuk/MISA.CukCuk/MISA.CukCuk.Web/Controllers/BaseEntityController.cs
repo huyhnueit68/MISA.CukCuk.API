@@ -58,7 +58,7 @@ namespace MISA.CukCuk.Web.Controllers
             //trả về dữ liệu
             if (serviceResult.MISACode == MISAEnum.NotValid)
             {
-                return BadRequest(serviceResult.Data);
+                return BadRequest(serviceResult);
             }
             if (serviceResult.MISACode == MISAEnum.IsValid)
             {

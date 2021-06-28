@@ -49,6 +49,7 @@ namespace MISA.ApplicationCore.Service
                 _serviceResult.Data = _baseRepository.Insert(data);
             }
 
+
             return _serviceResult;
         }
 
@@ -90,7 +91,8 @@ namespace MISA.ApplicationCore.Service
 
             foreach(var property in properties)
             {
-                var propertyName = property.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+                var propertyName = "";
+                /*property.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().Single().DisplayName*/
                 // check attribute need validate
                 if (property.IsDefined(typeof(Required), false))
                 {
@@ -101,6 +103,7 @@ namespace MISA.ApplicationCore.Service
                         isValid = false;
                         messArr.Add($"Vui lòng không để trống {propertyName}");
                         _serviceResult.MISACode = MISAEnum.NotValid;
+                        _serviceResult.Data = messArr;
                         _serviceResult.Messenger = "Dữ liệu không hợp lệ";
 
                         return isValid;
@@ -111,12 +114,13 @@ namespace MISA.ApplicationCore.Service
                 {
                     // check duplicate data
                     var valueDuplicate = _baseRepository.GetEntityByProperty(data, property);
-                    if(valueDuplicate != null)
+                    if(valueDuplicate.Count() != 0)
                     {
                         isValid = false;
 
                         messArr.Add($"{propertyName} {property.GetValue(data)} đã tồn tại");
                         _serviceResult.MISACode = MISAEnum.NotValid;
+                        _serviceResult.Data = messArr;
                         _serviceResult.Messenger = "Dữ liệu không hợp lệ";
 
                         return isValid;
