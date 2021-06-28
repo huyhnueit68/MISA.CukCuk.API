@@ -44,5 +44,15 @@ namespace MISA.ApplicationCore.Interfaces
         /// <returns>Trả về khách hàng có số điện thoại tương ứng</returns>
         /// CreatedBy: PQ Huy (24/06/2021)
         Customer GetCustomerByEmail(string email);
+
+        /// <summary>
+        /// Phân trang dữ liệu
+        /// </summary>
+        /// <param name="pageIndex">Index của page hiện tại</param>
+        /// <param name="pageSize">Kích thước mỗi page</param>
+        /// <returns></returns>
+        /// CreatedBy: PQ Huy (28.06.2021)
+        IEnumerable<Customer> GetCustomerPaging(int pageIndex, int pageSize);
+
     }
 }

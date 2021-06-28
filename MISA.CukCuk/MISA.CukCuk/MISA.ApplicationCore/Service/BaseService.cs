@@ -3,22 +3,25 @@ using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MISA.ApplicationCore.Service
 {
-    public class BaseService<Generic> : IBaseService<Generic>
+    public class BaseService<Generic> : IBaseService<Generic> where Generic:BaseEntity
     {
         #region DECLARE
         IBaseRepository<Generic> _baseRepository;
+        ServiceResult _serviceResult;
         #endregion
 
         #region Contructor
         public BaseService(IBaseRepository<Generic> baseRepository)
         {
             _baseRepository = baseRepository;
+            _serviceResult = new ServiceResult() { MISACode = MISAEnum.Success };
         }
         #endregion
 
@@ -35,75 +38,97 @@ namespace MISA.ApplicationCore.Service
 
         public virtual ServiceResult Insert(Generic data)
         {
-            var serviceResult = new ServiceResult();
+            // set state action
+            data.EntityState = EntityState.AddNew;
 
             // validate require
             var isValid = Validate(data);
 
             if(isValid)
             {
-                return _baseRepository.Insert(data);
-            } else
-            {
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Validate error",
-                        Code = "900"
-                    },
-                    userMsg = "Validate error",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Validate error";
-                serviceResult.Data = msg;
-
-                return serviceResult;
+                _serviceResult.Data = _baseRepository.Insert(data);
             }
+
+            return _serviceResult;
         }
 
         public ServiceResult Update(Guid id, Generic data)
         {
-            return _baseRepository.Update(id, data);
+            // set state action
+            data.EntityState = EntityState.Update;
+
+            // validate require
+            var isValid = Validate(data);
+
+            if (isValid)
+            {
+                _serviceResult.Data = _baseRepository.Update(id, data);
+            }
+
+            return _serviceResult;
         }
 
         public ServiceResult DeleteById(Guid id)
         {
-            return _baseRepository.DeleteById(id);
+            _serviceResult.Data = _baseRepository.DeleteById(id);
+            return _serviceResult;
         }
 
+        /// <summary>
+        /// Validate data
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// PQ Huy (28.06.2021)
         private bool Validate(Generic data)
         {
-            var isValid = true; 
+            var messArr = new List<string>();
+            bool isValid = true;
+
             // Get all property:
             var properties = data.GetType().GetProperties();
 
             foreach(var property in properties)
             {
+                var propertyName = property.GetCustomAttributes(typeof(DisplayNameAttribute), true);
                 // check attribute need validate
-                if(property.IsDefined(typeof(Required), false))
+                if (property.IsDefined(typeof(Required), false))
                 {
                     // check required
                     var propertyValue = property.GetValue(data);
                     if(propertyValue == null)
                     {
                         isValid = false;
+                        messArr.Add($"Vui lòng không để trống {propertyName}");
+                        _serviceResult.MISACode = MISAEnum.NotValid;
+                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+
+                        return isValid;
                     }
-                } else if ( property.IsDefined(typeof(CheckDuplicate), false))
+                }
+                
+                if (property.IsDefined(typeof(CheckDuplicate), false))
                 {
                     // check duplicate data
-                    var valueDuplicate = _baseRepository.GetEntityByProperty(property.Name, property.GetValue(data));
+                    var valueDuplicate = _baseRepository.GetEntityByProperty(data, property);
                     if(valueDuplicate != null)
                     {
                         isValid = false;
-                    } 
+
+                        messArr.Add($"{propertyName} {property.GetValue(data)} đã tồn tại");
+                        _serviceResult.MISACode = MISAEnum.NotValid;
+                        _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+
+                        return isValid;
+                    }
                 }
             }
 
-            return isValid;
+            _serviceResult.MISACode = MISAEnum.IsValid;
+            _serviceResult.Data = messArr;
+            _serviceResult.Messenger = "Validate dữ liệu hợp lệ";
 
+            return isValid;
         }
         #endregion
     }

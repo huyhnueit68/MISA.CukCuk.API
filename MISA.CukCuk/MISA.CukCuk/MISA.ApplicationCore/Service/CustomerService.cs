@@ -38,52 +38,6 @@ namespace MISA.ApplicationCore
             // validate data
             var isValid = true;
 
-            // 1. validate field not null, trả về lỗi khi validate
-            if (string.IsNullOrEmpty(customer.CustomerCode))
-            {
-                isValid = false;
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Mã khách hàng không được phép để trống",
-                        Code = "900"
-                    },
-                    userMsg = "Mã khách hàng không được phép để trống",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Mã khách hàng không được phép để trống";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
-            // 2. validate dupicate code
-            var customerDuplicate = _customerRepository.GetCustomerByCode(customer.CustomerCode);
-            if(customerDuplicate != null)
-            {
-                isValid = false;
-
-                var msg = new
-                {
-                    devMsg = new
-                    {
-                        fieldName = "CustomerCode",
-                        msg = "Mã khách hàng " + customer.CustomerCode + " đã tồn tại",
-                        Code = "900"
-                    },
-                    userMsg = "Mã khách hàng " + customer.CustomerCode + " đã tồn tại",
-                };
-
-                serviceResult.MISACode = MISAEnum.NotValid;
-                serviceResult.Messenger = "Mã khách hàng " + customer.CustomerCode + " đã tồn tại";
-                serviceResult.Data = msg;
-
-                return serviceResult;
-            }
-
             // logic validate:
             if (isValid)
             {
@@ -110,16 +64,17 @@ namespace MISA.ApplicationCore
             }
         }
 
-
         /// <summary>
         /// Lấy ra khách hàng theo mã khách hàng
         /// </summary>
         /// <param name="code">Mã khách hàng</param>
         /// <returns>Trả về khách hàng</returns>
         /// CreatedBy: PQ Huy (26.06.2021)
-        public IEnumerable<Customer> GetCustomerByCode(string code)
+        public Customer GetCustomerByCode(string code)
         {
-            throw new NotImplementedException();
+            var customer = _customerRepository.GetCustomerByCode(code);
+
+            return customer;
         }
 
         /// <summary>
@@ -130,7 +85,7 @@ namespace MISA.ApplicationCore
         /// <returns></returns>
         public IEnumerable<Customer> GetCustomerPaging(int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            return _customerRepository.GetCustomerPaging(pageNumber, pageSize);
         }
 
         #endregion

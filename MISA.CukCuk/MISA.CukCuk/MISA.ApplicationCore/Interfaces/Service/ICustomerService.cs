@@ -9,13 +9,13 @@ namespace MISA.ApplicationCore.Interfaces
 {
     public interface ICustomerService : IBaseService<Customer>
     {
-        /// <summary>
+        /// <summary>Zc
         /// Lấy dữ liệu khách hàng theo mã code khách hàng
         /// </summary>
         /// <param name="code">Mã code khách hàng</param>
         /// <returns>Lấy danh sách khách hàng theo code</returns>
         /// CreatedBy: PQ Huy (26.06.2021)
-        IEnumerable<Customer> GetCustomerByCode(string code);
+        Customer GetCustomerByCode(string code);
 
         /// <summary>
         /// Phân trang dữ liệu

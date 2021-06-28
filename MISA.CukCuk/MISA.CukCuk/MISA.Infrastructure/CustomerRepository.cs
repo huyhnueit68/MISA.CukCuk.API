@@ -80,6 +80,15 @@ namespace MISA.Infrastructure
             return resCustomer;
         }
 
+        public IEnumerable<Customer> GetCustomerPaging(int pageIndex, int pageSize)
+        {
+            _dbConnection.Open();
+
+            var resCustomer = _dbConnection.Query<Customer>("Proc_GetCustomerPaging", new { pageIndex = pageIndex, pageSize = pageSize }, commandType: CommandType.StoredProcedure);
+
+            return resCustomer;
+        }
+
         #endregion
     }
 }

@@ -37,6 +37,18 @@ namespace MISA.CukCuk.Web.Controllers
 
         #region Method
 
+        [HttpGet("{pageIndex}, {pageSize}")]
+        public IActionResult GetCustomerPaging(int pageIndex, int pageSize)
+        {
+            var resCustomer = _customerService.GetCustomerPaging(pageIndex, pageSize);
+
+            if (resCustomer != null)
+            {
+                return Ok(resCustomer);
+            }
+
+            return NoContent();
+        }
         #endregion
     }
 }

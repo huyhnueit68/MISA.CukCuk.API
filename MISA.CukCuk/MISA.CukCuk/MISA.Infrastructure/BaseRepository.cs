@@ -8,12 +8,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MISA.Infrastructure
 {
-    public class BaseRepository<Generic> : IBaseRepository<Generic>
+    public class BaseRepository<Generic> : IBaseRepository<Generic> where Generic : BaseEntity
     {
         #region DECLARE
         IConfiguration _configuration;
@@ -142,10 +143,32 @@ namespace MISA.Infrastructure
             return parameters;
         }
 
-        public IEnumerable<Generic> GetEntityByProperty(string propertyName, object propertyValue)
+        public IEnumerable<Generic> GetEntityByProperty(Generic generic, PropertyInfo property)
         {
+             
+
+            // connection database
             _dbConnection.Open();
-            var query = $"SELECT * FROM {_tableName} WHERE {propertyName} = @'{propertyValue}'";
+
+            // query database
+            var propertyName = property.Name;
+            var propertyValue = property.GetValue(generic);
+            var keyValue = generic.GetType().GetProperty($"{_tableName}Id").GetValue(generic);
+            var query = "";
+            
+
+            // check state action 
+            if (generic.EntityState == EntityState.AddNew)
+            {
+                query = $"SELECT * FROM {_tableName} WHERE {propertyName} = '{propertyValue}'";
+            } else  if( generic.EntityState == EntityState.Update)
+            {
+                query = $"SELECT * FROM {_tableName} WHERE {propertyName} = '{propertyValue}' AND {_tableName}Id <> '{keyValue}'";
+            } else
+            {
+                return null;
+            }
+
             var entity = _dbConnection.Query<Generic>(query, commandType: CommandType.Text);
 
             return entity;

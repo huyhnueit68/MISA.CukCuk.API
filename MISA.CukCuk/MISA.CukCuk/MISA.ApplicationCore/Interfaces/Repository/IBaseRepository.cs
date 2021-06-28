@@ -54,6 +54,6 @@ namespace MISA.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
-        IEnumerable<Generic> GetEntityByProperty(string propertyName, object propertyValue);
+        IEnumerable<Generic> GetEntityByProperty(Generic generic, PropertyInfo property);
     }
 }
