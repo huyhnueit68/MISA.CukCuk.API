@@ -71,7 +71,16 @@ namespace MISA.ApplicationCore.Service
 
         public ServiceResult DeleteById(Guid id)
         {
-            _serviceResult.Data = _baseRepository.DeleteById(id);
+            _serviceResult = _baseRepository.DeleteById(id);
+            if(Convert.ToInt32(_serviceResult.Data) > 0)
+            {
+                _serviceResult.MISACode = MISAEnum.Success;
+                _serviceResult.Messenger = "Xóa dữ liệu thành công";
+            } else
+            {
+                _serviceResult.MISACode = MISAEnum.NotValid;
+                _serviceResult.Messenger = "Không tồn tại id: " + id;
+            }
             return _serviceResult;
         }
 
@@ -91,8 +100,20 @@ namespace MISA.ApplicationCore.Service
 
             foreach(var property in properties)
             {
+                // get property name
                 var propertyName = "";
-                /*property.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().Single().DisplayName*/
+                if(property.GetCustomAttributesData().Count() != 0)
+                {
+                    try
+                    {
+                        propertyName = property.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().Single().DisplayName;
+                    } catch(Exception ce)
+                    {
+                        propertyName = "";
+                        Console.Write(ce);
+                    }
+                }
+
                 // check attribute need validate
                 if (property.IsDefined(typeof(Required), false))
                 {

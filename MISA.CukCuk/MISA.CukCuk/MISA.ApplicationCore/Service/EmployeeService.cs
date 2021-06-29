@@ -1,58 +1,36 @@
-﻿using MISA.ApplicationCore.Entities;
-using MISA.ApplicationCore.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MISA.ApplicationCore.Entities;
+using MISA.ApplicationCore.Enums;
+using MISA.ApplicationCore.Interfaces;
+using MISA.ApplicationCore.Service;
 
 namespace MISA.ApplicationCore
 {
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService : BaseService<Employee>, IEmployeeService
     {
         #region DECLARE
         IEmployeeRepository _employeeRepository;
         #endregion
 
-        #region Contructor
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        #region Construct
+        /// <summary>
+        /// hàm khỏi tạo cho customer service
+        /// </summary>
+        /// <param name="employeeRepository"></param>
+        /// CreatedBy: PQ Huy (24.06.2021)
+        public EmployeeService(IEmployeeRepository employeeRepository) : base(employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
-        #endregion
+
+        #endregion 
 
         #region Method
-        public IEnumerable<Employee> GetEmployees()
-        {
-            return _employeeRepository.GetEmployees();
-        }
 
-        public IEnumerable<Employee> GetEmployeeById(Guid id)
-        {
-            return _employeeRepository.GetEmployeeById(id);
-        }
-
-        public ServiceResult InsertEmployee(Employee employee)
-        {
-            /* Validate data*/
-
-            return _employeeRepository.InsertEmployee(employee);
-            //Trả về trạng thái khi thêm nhân viên thành công
-        }
-
-        public ServiceResult UpdateEmployee(Guid id, Employee employee)
-        {
-            /*Validate data*/
-
-            return _employeeRepository.UpdateEmployee(id, employee);
-            //Trả về trạng thái khi cập nhật nhân viên thành công
-        }
-
-        public ServiceResult DeleteEmployeeById(Guid id)
-        {
-            // Trả về trạng thái khi xóa nhân viên thành công
-            return _employeeRepository.DeleteEmployeeById(id);
-        }
         #endregion
     }
 }

@@ -72,8 +72,9 @@ namespace MISA.CukCuk.Web.Controllers
 
         // PUT api/<BaseEntityController>/5
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] Generic data)
+        public IActionResult Put([FromRoute]Guid id, [FromBody] Generic data)
         {
+
             // gọi function lấy dữ liệu
             var serviceResult = _baseService.Update(id, data);
 
@@ -82,7 +83,7 @@ namespace MISA.CukCuk.Web.Controllers
             {
                 return BadRequest(serviceResult.Data);
             }
-            if (serviceResult.MISACode == MISAEnum.IsValid)
+            if (serviceResult.MISACode == MISAEnum.IsValid || serviceResult.MISACode == MISAEnum.Success)
             {
                 return Created("EntityData", data);
             }
@@ -102,9 +103,9 @@ namespace MISA.CukCuk.Web.Controllers
             //trả về dữ liệu
             if (serviceResult.MISACode == MISAEnum.NotValid)
             {
-                return BadRequest(serviceResult.Data);
+                return BadRequest(serviceResult);
             }
-            if (serviceResult.MISACode == MISAEnum.IsValid)
+            if (serviceResult.MISACode == MISAEnum.IsValid || serviceResult.MISACode == MISAEnum.Success)
             {
                 return Ok(serviceResult);
             }

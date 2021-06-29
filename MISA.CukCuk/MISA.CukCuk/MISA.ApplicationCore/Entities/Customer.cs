@@ -26,7 +26,7 @@ namespace MISA.ApplicationCore.Entities
         /// </summary>
         [PrimaryKey]
         [DisplayName("Khóa chính khách hàng")]
-        public Guid? CustomerId { get; set; }
+        public Guid CustomerId { get; set; }
 
         /// <summary>
         /// Mã khách hàng
@@ -40,7 +40,7 @@ namespace MISA.ApplicationCore.Entities
         /// Họ và tên
         /// </summary>
         [DisplayName("Họ và tên")]
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         /// <summary>
         /// Ngày tháng năm sinh
@@ -53,11 +53,12 @@ namespace MISA.ApplicationCore.Entities
         /// Địa chỉ
         /// </summary>
         [DisplayName("Địa chỉ")]
-        public string Adress { get; set; }
+        public string? Adress { get; set; }
 
         /// <summary>
         /// Số điện thoại
         /// </summary>
+        [CheckDuplicate]
         [DisplayName("Số điện thoại")]
         public string PhoneNumber { get; set; }
 
@@ -70,6 +71,8 @@ namespace MISA.ApplicationCore.Entities
         /// <summary>
         /// email khách hàng
         /// </summary>
+        [CheckDuplicate]
+        [DisplayName("Email")]
         public string Email { get; set; }
 
         /// <summary>
@@ -80,14 +83,14 @@ namespace MISA.ApplicationCore.Entities
         /// <summary>
         /// Tạo bỏi
         /// </summary>
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
         /// Ngày thay đổi
         /// </summary>
-        public string ModifiedBy { get; set; }
+        public string? ModifiedBy { get; set; }
 
         /// <summary>
         /// Mã nhóm khách hàng
@@ -98,22 +101,22 @@ namespace MISA.ApplicationCore.Entities
         /// <summary>
         /// Mã số thẻ thành viên
         /// </summary>
-        public string MemberCardCode { get; set; }
+        public string? MemberCardCode { get; set; }
 
         /// <summary>
         /// note
         /// </summary>
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         /// <summary>
         /// Tên công ty
         /// </summary>
-        public string CompanyName { get; set; }
+        public string? CompanyName { get; set; }
         
         /// <summary>
         /// Mã số thuế công ty
         /// </summary>
-        public string CompanyTaxCode { get; set; }
+        public string? CompanyTaxCode { get; set; }
 
         #endregion
 

@@ -1,20 +1,18 @@
+using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MISA.ApplicationCore;
 using MISA.ApplicationCore.Interfaces;
+/*using MISA.ApplicationCore.Interfaces.Repository;
+using MISA.ApplicationCore.Interfaces.Service;*/
 using MISA.ApplicationCore.Service;
+using MISA.CukCuk.Web.Middwares;
 using MISA.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MISA.CukCuk.Web
 {
@@ -32,6 +30,11 @@ namespace MISA.CukCuk.Web
         {
 
             services.AddControllers();
+            // add new middaware process mapping data with guid
+            SqlMapper.AddTypeHandler(new MySqlGuidTypeHandler());
+            SqlMapper.RemoveTypeMap(typeof(Guid));
+            SqlMapper.RemoveTypeMap(typeof(Guid?));
+            // add swagger doc
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MISA.CukCuk.Web", Version = "v1" });
