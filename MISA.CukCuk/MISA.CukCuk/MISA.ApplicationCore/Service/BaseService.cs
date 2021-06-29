@@ -162,16 +162,18 @@ namespace MISA.ApplicationCore.Service
 
         public IEnumerable<Generic> ProcessDataImport(string path)
         {
-            // get file import
-            // path to your excel file
+            // 
+            // path to your excel file, get file import
             FileInfo fileInfo = new FileInfo(path);
+
 
             ExcelPackage package = new ExcelPackage(fileInfo);
             ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
 
-            // get number of rows and columns in the sheet
-            int rows = worksheet.Dimension.Rows; // 20
-            int columns = worksheet.Dimension.Columns; // 7
+            // check path info not null
+
+            int rows = worksheet.Dimension.Rows;
+            int columns = worksheet.Dimension.Columns;
 
             // convert data in file to object
             for (int i = 1; i <= rows; i++)
