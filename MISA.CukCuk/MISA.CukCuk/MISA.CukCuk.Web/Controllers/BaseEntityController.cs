@@ -70,6 +70,17 @@ namespace MISA.CukCuk.Web.Controllers
             }
         }
 
+        // POST api/<BaseEntityController>
+        [HttpPost("import")]
+        public IActionResult Import(string path)
+        {
+            // gọi function lấy dữ liệu
+            var serviceResult = _baseService.ProcessDataImport(path);
+
+            //trả về dữ liệu
+            return Ok(serviceResult);
+        }
+
         // PUT api/<BaseEntityController>/5
         [HttpPut("{id}")]
         public IActionResult Put([FromRoute]Guid id, [FromBody] Generic data)

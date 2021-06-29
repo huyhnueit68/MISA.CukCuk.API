@@ -1,9 +1,13 @@
-﻿using MISA.ApplicationCore.Entities;
+﻿using Dapper;
+using MISA.ApplicationCore.Entities;
 using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -155,6 +159,47 @@ namespace MISA.ApplicationCore.Service
 
             return isValid;
         }
+
+        public IEnumerable<Generic> ProcessDataImport(string path)
+        {
+            // get file import
+            // path to your excel file
+            FileInfo fileInfo = new FileInfo(path);
+
+            ExcelPackage package = new ExcelPackage(fileInfo);
+            ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+
+            // get number of rows and columns in the sheet
+            int rows = worksheet.Dimension.Rows; // 20
+            int columns = worksheet.Dimension.Columns; // 7
+
+            // convert data in file to object
+            for (int i = 1; i <= rows; i++)
+            {
+                for (int j = 1; j <= columns; j++)
+                {
+
+                    string content = worksheet.Cells[i, j].Value.ToString();
+                    
+                }
+            }
+
+
+            // validate object and set status for data
+
+            throw new NotImplementedException();
+        }
+
+        public ServiceResult ImportData(Generic[] data)
+        {
+            // count import data success
+
+            // load array data and insert by api insert
+
+            //return result
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

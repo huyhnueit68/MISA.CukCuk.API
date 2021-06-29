@@ -20,7 +20,7 @@ namespace MISA.Infrastructure
         IConfiguration _configuration;
         string _connectionString = string.Empty;
         protected IDbConnection _dbConnection = null;
-        protected string _tableName = string.Empty;
+        public string _tableName = string.Empty;
         #endregion
 
         #region Contructor
@@ -153,6 +153,16 @@ namespace MISA.Infrastructure
             return entity;
         }
 
+        public ServiceResult ImportData(Generic[] data)
+        {
+            var rowAffects = 0;
+            var serviceResult = new ServiceResult();
+
+            serviceResult.Data = rowAffects;
+            serviceResult.MISACode = MISAEnum.Success;
+
+            return serviceResult;
+        }
 
         #endregion
     }

@@ -41,11 +41,27 @@ namespace MISA.ApplicationCore.Interfaces
         ServiceResult Update(Guid id, Generic data);
 
         /// <summary>
-        /// Xóa thông tin khách hàng theo khóa chính
+        /// Xóa thông tin theo khóa chính
         /// </summary>
         /// <param name="id">Mã bản ghi</param>
         /// <returns>Trả về thạng thái cập nhật danh sách bản ghi</returns>
         /// CreatedBy: PQ Huy (24.06.2021)
         ServiceResult DeleteById(Guid id);
+
+        /// <summary>
+        /// Xử lý dữ liệu import từ người dùng
+        /// </summary>
+        /// <param name="path"> đường dẫn đến file import</param>
+        /// <returns>Trả về danh sách dữ liệu và kết quả sau khi xử lý</returns>
+        IEnumerable<Generic> ProcessDataImport(string path);
+
+        /// <summary>
+        /// Nập khẩu dữ liệu
+        /// </summary>
+        /// <param name="data">Dữ liệu nhận khẩu</param>
+        /// <returns>Trả về số bản ghi nhập khẩu thành công</returns>
+        /// CreatedBy: PQ Huy (29.06.2021)
+        ServiceResult ImportData(Generic[] data);
+
     }
 }

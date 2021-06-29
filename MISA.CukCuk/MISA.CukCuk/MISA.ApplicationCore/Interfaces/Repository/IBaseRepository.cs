@@ -37,7 +37,7 @@ namespace MISA.ApplicationCore.Interfaces
         /// Sửa thông tin bản ghi
         /// </summary>
         /// <param name="id">Mã bản ghi</param>
-        /// <param name="customer">Dữ liệu bản ghi cần cập nhật</param>
+        /// <param name="data">Dữ liệu bản ghi cần cập nhật</param>
         /// <returns>Trả về trạng thái cập nhật dữ liệu</returns>
         ServiceResult Update(Guid id, Generic data);
 
@@ -54,6 +54,16 @@ namespace MISA.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
+        /// CreatedBy: PQ Huy (28.06.2021)
         IEnumerable<Generic> GetEntityByProperty(Generic generic, PropertyInfo property);
+
+        /// <summary>
+        /// Nập khẩu dữ liệu
+        /// </summary>
+        /// <param name="data">Dữ liệu nhận khẩu</param>
+        /// <returns>Trả về số bản ghi nhập khẩu thành công</returns>
+        /// CreatedBy: PQ Huy (29.06.2021)
+        ServiceResult ImportData(Generic[] data);
+
     }
 }
