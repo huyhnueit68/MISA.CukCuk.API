@@ -136,7 +136,7 @@ namespace MISA.Infrastructure
             var keyValue = generic.GetType().GetProperty($"{_tableName}Id").GetValue(generic);
             var query = "";
 
-            // check state action 
+            // check state action
             if (generic.EntityState == EntityState.AddNew)
             {
                 query = $"SELECT * FROM {_tableName} WHERE {propertyName} = '{propertyValue}'";
