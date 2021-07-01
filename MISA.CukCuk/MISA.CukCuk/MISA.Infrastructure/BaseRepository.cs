@@ -46,12 +46,24 @@ namespace MISA.Infrastructure
 
         public IEnumerable<Generic> GetById(Guid id)
         {
-
             //khởi tạo các commandText
             var parameterId = new DynamicParameters();
             parameterId.Add($"@{_tableName}Id", id);
 
             var data = _dbConnection.Query<Generic>($"Proc_Get{_tableName}ById", parameterId, commandType: CommandType.StoredProcedure);
+
+            //Trả về dữ liệu
+            return data;
+        }
+
+
+        public IEnumerable<Generic> GetByCode(string code)
+        {
+            //khởi tạo các commandText
+            var parameterId = new DynamicParameters();
+            parameterId.Add($"@{_tableName}Code", code);
+
+            var data = _dbConnection.Query<Generic>($"Proc_Get{_tableName}ByCode", parameterId, commandType: CommandType.StoredProcedure);
 
             //Trả về dữ liệu
             return data;

@@ -118,6 +118,11 @@ namespace MISA.ApplicationCore.Entities
         /// </summary>
         public string? CompanyTaxCode { get; set; }
 
+        /// <summary>
+        /// result validate
+        /// </summary>
+        public object valdResult { get; set; }
+
         #endregion
 
         #region Method

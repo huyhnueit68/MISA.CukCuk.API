@@ -26,6 +26,14 @@ namespace MISA.ApplicationCore.Interfaces
         IEnumerable<Generic> GetById(Guid id);
 
         /// <summary>
+        /// Lấy thông tin theo code
+        /// </summary>
+        /// <param name="code"> Code bản ghi</param>
+        /// <returns>Trả về bản ghi tương ứng</returns>
+        /// CreatedBy: PQ Huy (25/06/2021)
+        IEnumerable<Generic> GetByCode(string code);
+
+        /// <summary>
         /// Thêm mới bản ghi
         /// </summary>
         /// <param name="data">Dữ liệu bản ghi</param>

@@ -53,7 +53,7 @@ namespace MISA.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="path"> đường dẫn đến file import</param>
         /// <returns>Trả về danh sách dữ liệu và kết quả sau khi xử lý</returns>
-        IEnumerable<Generic> ProcessDataImport(string path);
+        string ProcessDataImport(string path);
 
         /// <summary>
         /// Nập khẩu dữ liệu

@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 using MISA.ApplicationCore.Resource;
+using System.Text.Json;
 
 namespace MISA.ApplicationCore.Service
 {
@@ -167,136 +168,214 @@ namespace MISA.ApplicationCore.Service
             return isValid;
         }
 
-        public IEnumerable<Generic> ProcessDataImport(string path)
+        public string ProcessDataImport(string path)
         {
             // import resource file
             // Create a resource manager to retrieve resources.
             ResourceManager resourceManager = new ResourceManager($"MISA.ApplicationCore.Resource.{_tableName}", Assembly.GetExecutingAssembly());
-
             ResourceSet resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+             // path to your excel file, get file import
+                FileInfo fileInfo = new FileInfo(path);
 
-            // path to your excel file, get file import
-            FileInfo fileInfo = new FileInfo(path);
+                ExcelPackage package = new ExcelPackage(fileInfo);
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
 
-            ExcelPackage package = new ExcelPackage(fileInfo);
-            ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+                // get number of rows and columns in the sheet
+                int rows = worksheet.Dimension.Rows;
+                int columns = worksheet.Dimension.Columns;
 
-            // get number of rows and columns in the sheet
-            int rows = worksheet.Dimension.Rows;
-            int columns = worksheet.Dimension.Columns;
+                /*
+                    Convert data table to object with key and value
+                 */
+                List<string> listKey = new List<string>();
+                List<SortedList> objDataTable = new List<SortedList>();
 
-            /*
-                Convert data table to object with key and value
-             */
-
-            List<string> listKey = new List<string>();
-            List<SortedList> objDataTable = new List<SortedList>();
-
-            // get title table convert to resource
-            for (int i = 1; i <= columns; i++)
-            {
-                string title = worksheet.Cells[2, i].Value.ToString();
-
-                // format title
-                string formatTitle = title.Trim(new Char[] { ' ', '(', '*',')' , '.' }).Trim();
-
-                // covert title to lowercase string
-                string titleLowerCase = formatTitle.ToLower();
-
-                // compare with resouce and save to list key
-                foreach (DictionaryEntry entry in resourceSet)
+                // get title table convert to resource
+                for (int i = 1; i <= columns; i++)
                 {
-                    string resourceKey = entry.Key.ToString();
-                    string resourceValue = entry.Value.ToString();
-                    
-                    if(titleLowerCase == resourceValue.ToLower())
+                    string title = worksheet.Cells[2, i].Value.ToString();
+
+                    // format title
+                    string formatTitle = title.Trim(new Char[] { ' ', '(', '*', ')', '.' }).Trim();
+
+                    // covert title to lowercase string
+                    string titleLowerCase = formatTitle.ToLower();
+
+                    // compare with resouce and save to list key
+                    foreach (DictionaryEntry entry in resourceSet)
                     {
-                        listKey.Add(resourceKey);
-                        break;
-                    }
-                }
-            }
+                        string resourceKey = entry.Key.ToString();
+                        string resourceValue = entry.Value.ToString();
 
-            // match value with resource
-
-
-            for (int i = 3; i <= rows; i++)
-            {
-                /*List<object> temp = new List<object>();*/
-                SortedList temp = new SortedList();
-
-                var temp1 = new{};
-                for (int j = 0; j < listKey.Count(); j++)
-                {
-                    string key = listKey[j];
-                    string value = "";
-                    if(worksheet.Cells[i, j + 1].Value != null)
-                    {
-                        value = worksheet.Cells[i, j + 1].Value.ToString();
-                    }
-                    temp.Add(key, value);
-                }
-
-                /*var json = JsonSerializer.Serialize(temp);*/
-
-                objDataTable.Add(temp);
-            }
-
-            /* validate object and set status for data */
-
-            // validate in file
-            for(int i = 0; i < objDataTable.Count(); i++)
-            {
-                ServiceResult serviceResult = new ServiceResult();
-                serviceResult.MISACode = MISAEnum.IsValid;
-                SortedList items = objDataTable[i]; // get items need compare
-
-                for (int j = 0; i < objDataTable.Count(); i++)
-                {
-                    if(i!=j)
-                    {
-                        SortedList temp = objDataTable[j]; // get items need compare
-                        
-                        foreach(var item in items)
+                        if (titleLowerCase == resourceValue.ToLower())
                         {
-                            string validate = "ValidateResult";
-                            if (item.GetType().GetProperty("Key").GetValue(item).ToString() == $"{_tableName}Code")
-                            {
-                                // validate not null
-                                if(item.GetType().GetProperty("Value").GetValue(item) == null || item.GetType().GetProperty("Value").GetValue(item) == "")
-                                {
-                                    string valueResource = GetValueResource($"{_tableName}Code");
-                                    serviceResult.MISACode = MISAEnum.NotValid;
-                                    serviceResult.Messenger = $"{valueResource} không được để trống";
-
-                                    // add resource to object
-                                    objDataTable[i].Add(validate, serviceResult);
-                                } else
-                                {
-                                    // validate duplicate
-                                    string itemCode = item.GetType().GetProperty("Value").GetValue(item).ToString();
-
-                                    // add resource to object
-                                    objDataTable[i].Add(validate, serviceResult);
-                                }
-                            }
+                            listKey.Add(resourceKey);
+                            break;
                         }
                     }
                 }
-            }
 
-            foreach(SortedList property in objDataTable)
-            {
-                foreach(var prop in property)
+                // match value with resource
+                for (int i = 3; i <= rows; i++)
                 {
-                    string key = prop.GetType().GetProperty("Key").GetValue(prop).ToString();
+                    /*List<object> temp = new List<object>();*/
+                    SortedList temp = new SortedList();
+
+                    var temp1 = new { };
+                    for (int j = 0; j < listKey.Count(); j++)
+                    {
+                        string key = listKey[j];
+                        string value = "";
+                        if (worksheet.Cells[i, j + 1].Value != null)
+                        {
+                            value = worksheet.Cells[i, j + 1].Value.ToString();
+                        }
+                        temp.Add(key, value);
+                    }
+
+                    /*var json = JsonSerializer.Serialize(temp);*/
+
+                    objDataTable.Add(temp);
+                }
+
+                /* validate object and set status for data */
+
+                // validate in file
+                for (int i = 0; i < objDataTable.Count(); i++)
+                {
+                    // get items need compare
+                    SortedList items = objDataTable[i];
+                    List<object> consoleMess = new List<object>();
+                    bool isNull = true, isDuplicateFile = true, isDuplicateDb = true;
+
+                    for (int j = 0; j < objDataTable.Count(); j++)
+                    {
+                        if (i != j)
+                        {
+                            ServiceResult serviceResult = new ServiceResult();
+                            serviceResult.MISACode = MISAEnum.IsValid;
+                            SortedList temp = objDataTable[j]; // get items need compare
+                        
+                            foreach (var item in items)
+                            {
+                                string validate = "ValidateResult";
+
+                                // validate code
+                                if (item.GetType().GetProperty("Key").GetValue(item).ToString() == $"{_tableName}Code")
+                                {
+                                    string valueResource = GetValueResource($"{_tableName}Code");
+                                    var value = item.GetType().GetProperty("Value").GetValue(item);
+                                    // validate not null
+
+                                    if (value is null or "")
+                                    {
+                                        if(isNull)
+                                        {
+                                            serviceResult.MISACode = MISAEnum.NotValid;
+                                            serviceResult.Messenger = $"{valueResource} không được để trống";
+                                            isNull = false;
+                                            consoleMess.Add(serviceResult);
+                                            // add resource to object
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // validate duplicate in file
+                                        string itemCode = item.GetType().GetProperty("Value").GetValue(item).ToString();
+                                        string valueValidate = getValueSortedList(temp, $"{_tableName}Code");
+
+                                        if (itemCode == valueValidate)
+                                        {
+                                            if(isDuplicateFile)
+                                            {
+                                                // set message service result
+                                                serviceResult.MISACode = MISAEnum.NotValid;
+                                                serviceResult.Messenger = $"{valueResource} {itemCode} đã trùng lặp trong tệp của bạn";
+                                                isDuplicateFile = false;
+                                                consoleMess.Add(serviceResult);
+                                            }
+                                        }
+
+                                        // validate in database
+                                        var resFilter = _baseRepository.GetByCode(itemCode);
+                                        if (resFilter.Count() > 0)
+                                        {
+                                            if(isDuplicateDb)
+                                            {
+                                                // set message service result
+                                                serviceResult.MISACode = MISAEnum.NotValid;
+                                                serviceResult.Messenger = $"{valueResource} {itemCode} đã trùng lặp trong hệ thống";
+                                                consoleMess.Add(serviceResult);
+                                                isDuplicateDb = false;
+                                            }
+                                        }
+
+                                        // add resource to object
+
+
+                                        TestResult(objDataTable[i]);
+                                    }
+                                }
+
+                                // validate datetime
+
+                            }
+                        }
+
+                    }
+                }
+
+                var json = JsonSerializer.Serialize(objDataTable);
+
+                return json;
+
+            /*try
+            {
+               
+            }
+            catch (Exception ce)
+            {
+                return ce.ToString();
+            }*/
+        }
+
+        private string TestResult(SortedList items)
+        {
+            foreach(var item in items)
+            {
+                if(item.GetType().GetProperty("Key").GetValue(item).ToString() == "ValidateResult")
+                {
+                    return "";
                 }
             }
 
-            // validate in database
+            return "";
+        }
 
+        /// <summary>
+        ///  Get value in item sorted list
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="prop"></param>
+        /// <returns></returns>
+        /// PQ Huy (01.07.2021)
+        private string getValueSortedList(SortedList item, string prop)
+        {
+            string value = "";
 
-            throw new NotImplementedException();
+            foreach(var obj in item)
+            {
+                if (obj.GetType().GetProperty("Key").GetValue(obj).ToString() == $"{_tableName}Code")
+                {
+                    if (obj.GetType().GetProperty("Value").GetValue(obj) is not null or not "")
+                    {
+                        value = obj.GetType().GetProperty("Value").GetValue(obj).ToString();
+                    }
+                    break;
+                }
+            }
+
+            return value;
         }
 
         /// <summary>
@@ -318,6 +397,7 @@ namespace MISA.ApplicationCore.Service
                 if(key == entry.Key.ToString())
                 {
                     value = entry.Value.ToString();
+                    break;
                 }
             }
 
