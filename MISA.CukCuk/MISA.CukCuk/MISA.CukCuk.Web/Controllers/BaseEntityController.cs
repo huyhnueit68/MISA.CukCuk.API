@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MISA.ApplicationCore.Entities;
 using MISA.ApplicationCore.Enums;
 using MISA.ApplicationCore.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -70,15 +73,10 @@ namespace MISA.CukCuk.Web.Controllers
             }
         }
 
-        // POST api/<BaseEntityController>
         [HttpPost("import")]
-        public IActionResult Import(string path)
+        public Task<ServiceResult> Import(IFormFile formFile, CancellationToken cancellationToken)
         {
-            // gọi function lấy dữ liệu
-            var serviceResult = _baseService.ProcessDataImport(path);
-
-            //trả về dữ liệu
-            return Ok(serviceResult);
+            return _baseService.ProcessDataImport(formFile, cancellationToken);
         }
 
         // PUT api/<BaseEntityController>/5

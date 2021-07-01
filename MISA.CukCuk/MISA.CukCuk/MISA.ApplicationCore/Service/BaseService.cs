@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 using System.Reflection;
 using MISA.ApplicationCore.Resource;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
+using System.Threading;
 
 namespace MISA.ApplicationCore.Service
 {
@@ -168,7 +171,157 @@ namespace MISA.ApplicationCore.Service
             return isValid;
         }
 
-        public string ProcessDataImport(string path)
+        public ServiceResult ProcessDataImport(IEnumerable<Generic> generics)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public async Task<ServiceResult> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken)
+        {
+            if (formFile == null || formFile.Length <= 0)
+            {
+                var msg = new
+                {
+                    devMsg = "File không có dữ liệu.",
+                    userMsg = "File không có dữ liệu.",
+                    Code = MISAEnum.IsValid
+                };
+
+                _serviceResult.Data = msg;
+                _serviceResult.MISACode = MISAEnum.IsValid;
+                _serviceResult.Messenger = "Không có dữ liệu để import";
+            }
+
+            if (!Path.GetExtension(formFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
+            {
+                var msg = new
+                {
+                    devMsg = "Định dạng file không được hỗ trợ.",
+                    userMsg = "Định dạng file không được hỗ trợ.",
+                    Code = MISAEnum.IsValid
+                };
+
+                _serviceResult.Data = msg;
+                _serviceResult.MISACode = MISAEnum.IsValid;
+                _serviceResult.Messenger = "Định dạng file không được hỗ trợ";
+            }
+
+            var entities = new List<Generic>();
+
+            using (var stream = new MemoryStream())
+            {
+                await formFile.CopyToAsync(stream, cancellationToken);
+
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    // import resource file
+                    // Create a resource manager to retrieve resources.
+                    ResourceManager resourceManager = new ResourceManager($"MISA.ApplicationCore.Resource.{_tableName}", Assembly.GetExecutingAssembly());
+                    ResourceSet resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+
+                    // get number of rows and columns in the sheet
+                    int rows = worksheet.Dimension.Rows;
+                    int columns = worksheet.Dimension.Columns;
+
+                    /*
+                        Convert data table to object with key and value
+                     */
+                    List<string> listKey = new List<string>();
+                    List<Generic> listGenerics = new List<Generic>();
+
+                    // get title table convert to resource
+                    for (int i = 1; i <= columns; i++)
+                    {
+                        string title = worksheet.Cells[2, i].Value.ToString();
+
+                        // format title
+                        string formatTitle = title.Trim(new Char[] { ' ', '(', '*', ')', '.' }).Trim();
+
+                        // covert title to lowercase string
+                        string titleLowerCase = formatTitle.ToLower();
+
+                        // compare with resouce and save to list key
+                        foreach (DictionaryEntry entry in resourceSet)
+                        {
+                            string resourceKey = entry.Key.ToString();
+                            string resourceValue = entry.Value.ToString();
+
+                            if (titleLowerCase == resourceValue.ToLower())
+                            {
+                                listKey.Add(resourceKey);
+                                break;
+                            }
+                        }
+                    }
+
+                    // get data to list generics
+                    for (int i = 3; i <= rows; i++)
+                    {
+                        List<object> temp = new List<object>();
+                        var entity = (Generic)Activator.CreateInstance(typeof(Generic), new object[] { });
+
+                        for (int j = 0; j < listKey.Count(); j++)
+                        {
+                            string key = listKey[j];
+                            string value = "";
+
+                            if (worksheet.Cells[i, j + 1].Value != null)
+                            {
+                                value = worksheet.Cells[i, j + 1].Value != null ?
+                                                worksheet.Cells[i, j + 1].Value.ToString().Trim() : "";
+
+                                value = FormatData(entity.GetType().GetProperty(listKey[j]).PropertyType, value);
+                                entity.GetType().GetProperty(listKey[j]).SetValue(entity, value);
+                            }
+                        }
+
+                        listGenerics.Add(entity);
+                    }
+                }
+            }
+
+
+            return _serviceResult;
+
+        }
+
+        private dynamic FormatData(Type type, string value)
+        {
+            dynamic res = null;
+            if (value == "")
+                return res;
+
+            if(type == typeof(Guid))
+            {
+                Guid newGuid = Guid.Parse(value);
+                return newGuid;
+            }
+
+            if (type.Name == "Nullable`1")
+            {
+                type = Nullable.GetUnderlyingType(type);
+                //Đổi format ngày tháng
+                if (type.Name == "DateTime")
+                {
+                    var temp = Regex.Split(value, @"/").ToList();
+                    while (temp.Count < 3)
+                    {
+                        temp.Insert(0, "01");
+                    }
+                    temp.Reverse();
+                    value = String.Join('-', temp);
+                }
+            }
+
+            res = Convert.ChangeType(value, type);
+
+            return res;
+        }
+
+        #region test
+        public string ProcessDataImport2(string path)
         {
             // import resource file
             // Create a resource manager to retrieve resources.
@@ -217,16 +370,16 @@ namespace MISA.ApplicationCore.Service
 
                 // match value with resource
                 List<Generic> listGenerics = new List<Generic>();
-                //Lấy tất cả property
+
                 var properties = typeof(Generic).GetProperties()
-                                .Where(p => p.IsDefined(typeof(DisplayNameAttribute), false))
-                                .Select(p => new
-                                {
-                                    PropertyName = p.Name,
-                                    DisplayName = p.GetCustomAttributes(typeof(DisplayNameAttribute),
-                                            false).Cast<DisplayNameAttribute>().Single().DisplayName,
-                                    DataType = p.PropertyType
-                                    });
+                    .Where(p => p.IsDefined(typeof(DisplayNameAttribute), false))
+                    .Select(p => new
+                    {
+                        PropertyName = p.Name,
+                        DisplayName = p.GetCustomAttributes(typeof(DisplayNameAttribute),
+                                false).Cast<DisplayNameAttribute>().Single().DisplayName,
+                        DataType = p.PropertyType
+                    });
 
                 for (int i = 3; i <= rows; i++)
                 {
@@ -241,6 +394,11 @@ namespace MISA.ApplicationCore.Service
                         {
                             value = worksheet.Cells[i, j + 1].Value != null ?
                                             worksheet.Cells[i, j + 1].Value.ToString().Trim() : "";
+                            
+                            // convert data
+                            var prop = properties.FirstOrDefault(p => listKey[j].ToLower().Contains(p.DisplayName.ToLower()));
+
+                            value = this.ConvertFormatData(prop.DataType, value);
 
                             entity.GetType().GetProperty(listKey[j]).SetValue(entity, value);
                         }
@@ -361,6 +519,7 @@ namespace MISA.ApplicationCore.Service
 
             return "";
         }
+        #endregion
 
         /// <summary>
         ///  Get value in item sorted list
@@ -414,13 +573,35 @@ namespace MISA.ApplicationCore.Service
             return value;
         }
 
-        public ServiceResult ImportData(Generic[] data)
+        private dynamic ConvertFormatData(Type type, string value)
         {
-            // count import data success
+            dynamic res = null;
+            if (value == "")
+                return res;
 
-            // load array data and insert by api insert
+            if (type.Name == "Nullable`1")
+            {
+                type = Nullable.GetUnderlyingType(type);
 
-            //return result
+                if (type.Name == "DateTime")
+                {
+                    var temp = Regex.Split(value, @"/").ToList();
+                    while (temp.Count < 3)
+                    {
+                        temp.Insert(0, "01");
+                    }
+                    temp.Reverse();
+                    value = String.Join('-', temp);
+                }
+            }
+
+            res = Convert.ChangeType(value, type);
+
+            return res;
+        }
+
+        public ServiceResult ImportData(IEnumerable<Generic> generics)
+        {
             throw new NotImplementedException();
         }
 

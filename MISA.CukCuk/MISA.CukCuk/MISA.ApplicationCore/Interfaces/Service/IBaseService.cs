@@ -1,8 +1,10 @@
-﻿using MISA.ApplicationCore.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using MISA.ApplicationCore.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MISA.ApplicationCore.Interfaces
@@ -51,9 +53,9 @@ namespace MISA.ApplicationCore.Interfaces
         /// <summary>
         /// Xử lý dữ liệu import từ người dùng
         /// </summary>
-        /// <param name="path"> đường dẫn đến file import</param>
+        /// <param name="generics"> dữ liệu file</param>
         /// <returns>Trả về danh sách dữ liệu và kết quả sau khi xử lý</returns>
-        string ProcessDataImport(string path);
+        Task<ServiceResult> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken);
 
         /// <summary>
         /// Nập khẩu dữ liệu
@@ -61,7 +63,7 @@ namespace MISA.ApplicationCore.Interfaces
         /// <param name="data">Dữ liệu nhận khẩu</param>
         /// <returns>Trả về số bản ghi nhập khẩu thành công</returns>
         /// CreatedBy: PQ Huy (29.06.2021)
-        ServiceResult ImportData(Generic[] data);
+        ServiceResult ImportData(IEnumerable<Generic> generics);
 
     }
 }

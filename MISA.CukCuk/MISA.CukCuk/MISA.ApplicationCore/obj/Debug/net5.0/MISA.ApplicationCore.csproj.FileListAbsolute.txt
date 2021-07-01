@@ -24,3 +24,5 @@ C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\
 C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.pdb
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.Resource.Customer.resources
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csproj.GenerateResource.cache
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.Resource.Customer.resources
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.ApplicationCore\obj\Debug\net5.0\MISA.ApplicationCore.csproj.GenerateResource.cache

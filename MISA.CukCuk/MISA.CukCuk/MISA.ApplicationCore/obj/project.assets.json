@@ -35,6 +35,19 @@
           "lib/net5.0/EPPlus.dll": {}
         }
       },
+      "Microsoft.AspNetCore.Http.Features/5.0.7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.1",
+          "System.IO.Pipelines": "5.0.1"
+        },
+        "compile": {
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {}
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {}
+        }
+      },
       "Microsoft.Extensions.Configuration/5.0.0": {
         "type": "package",
         "dependencies": {
@@ -126,7 +139,7 @@
           "lib/netstandard2.0/Microsoft.Extensions.FileSystemGlobbing.dll": {}
         }
       },
-      "Microsoft.Extensions.Primitives/5.0.0": {
+      "Microsoft.Extensions.Primitives/5.0.1": {
         "type": "package",
         "compile": {
           "lib/netcoreapp3.0/Microsoft.Extensions.Primitives.dll": {}
@@ -624,6 +637,15 @@
         },
         "runtime": {
           "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {}
+        }
+      },
+      "System.IO.Pipelines/5.0.1": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.0/System.IO.Pipelines.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/System.IO.Pipelines.dll": {}
         }
       },
       "System.Linq/4.3.0": {
@@ -1246,6 +1268,25 @@
         "readme.txt"
       ]
     },
+    "Microsoft.AspNetCore.Http.Features/5.0.7": {
+      "sha512": "bF4sJrrHHFooGKjGMCU+qqEz0gTRSHDieYXCgn18ci8gV3VS5wIOP2d0WEXV5WmjDzXxfCLoQpBJIl4rogdSdA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.http.features/5.0.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/net461/Microsoft.AspNetCore.Http.Features.xml",
+        "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Http.Features.xml",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.xml",
+        "microsoft.aspnetcore.http.features.5.0.7.nupkg.sha512",
+        "microsoft.aspnetcore.http.features.nuspec"
+      ]
+    },
     "Microsoft.Extensions.Configuration/5.0.0": {
       "sha512": "LN322qEKHjuVEhhXueTUe7RNePooZmS8aGid5aK2woX3NPjSnONFyKUc6+JknOS6ce6h2tCLfKPTBXE3mN/6Ag==",
       "type": "package",
@@ -1388,10 +1429,10 @@
         "version.txt"
       ]
     },
-    "Microsoft.Extensions.Primitives/5.0.0": {
-      "sha512": "cI/VWn9G1fghXrNDagX9nYaaB/nokkZn0HYAawGaELQrl8InSezfe9OnfPZLcJq3esXxygh3hkq2c3qoV3SDyQ==",
+    "Microsoft.Extensions.Primitives/5.0.1": {
+      "sha512": "5WPSmL4YeP7eW+Vc8XZ4DwjYWBAiSwDV9Hm63JJWcz1Ie3Xjv4KuJXzgCstj48LkLfVCYa7mLcx7y+q6yqVvtw==",
       "type": "package",
-      "path": "microsoft.extensions.primitives/5.0.0",
+      "path": "microsoft.extensions.primitives/5.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1404,7 +1445,7 @@
         "lib/netcoreapp3.0/Microsoft.Extensions.Primitives.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Primitives.xml",
-        "microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+        "microsoft.extensions.primitives.5.0.1.nupkg.sha512",
         "microsoft.extensions.primitives.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
@@ -2735,6 +2776,32 @@
         "ref/xamarinwatchos10/_._",
         "system.io.filesystem.primitives.4.3.0.nupkg.sha512",
         "system.io.filesystem.primitives.nuspec"
+      ]
+    },
+    "System.IO.Pipelines/5.0.1": {
+      "sha512": "qEePWsaq9LoEEIqhbGe6D5J8c9IqQOUuTzzV6wn1POlfdLkJliZY3OlB0j0f17uMWlqZYjH7txj+2YbyrIA8Yg==",
+      "type": "package",
+      "path": "system.io.pipelines/5.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.IO.Pipelines.dll",
+        "lib/net461/System.IO.Pipelines.xml",
+        "lib/netcoreapp3.0/System.IO.Pipelines.dll",
+        "lib/netcoreapp3.0/System.IO.Pipelines.xml",
+        "lib/netstandard1.3/System.IO.Pipelines.dll",
+        "lib/netstandard1.3/System.IO.Pipelines.xml",
+        "lib/netstandard2.0/System.IO.Pipelines.dll",
+        "lib/netstandard2.0/System.IO.Pipelines.xml",
+        "ref/netcoreapp2.0/System.IO.Pipelines.dll",
+        "ref/netcoreapp2.0/System.IO.Pipelines.xml",
+        "system.io.pipelines.5.0.1.nupkg.sha512",
+        "system.io.pipelines.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Linq/4.3.0": {
@@ -4509,23 +4576,24 @@
   "projectFileDependencyGroups": {
     "net5.0": [
       "Dapper >= 2.0.90",
-      "EPPlus >= 5.7.0"
+      "EPPlus >= 5.7.0",
+      "Microsoft.AspNetCore.Http.Features >= 5.0.7"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pqhuy\\.nuget\\packages\\": {}
+    "C:\\Users\\Administrator\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+      "projectUniqueName": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
       "projectName": "MISA.ApplicationCore",
-      "projectPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
-      "packagesPath": "C:\\Users\\pqhuy\\.nuget\\packages\\",
-      "outputPath": "D:\\HuyPham_MF869\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
+      "projectPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\MISA.ApplicationCore.csproj",
+      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+      "outputPath": "C:\\Document Study\\MISA_Training\\Backend\\MISA.CukCuk.API\\MISA.CukCuk\\MISA.CukCuk\\MISA.ApplicationCore\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\pqhuy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4558,6 +4626,10 @@
           "EPPlus": {
             "target": "Package",
             "version": "[5.7.0, )"
+          },
+          "Microsoft.AspNetCore.Http.Features": {
+            "target": "Package",
+            "version": "[5.0.7, )"
           }
         },
         "imports": [
@@ -4575,7 +4647,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -140,3 +140,6 @@ C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\EPPlus.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\Microsoft.IO.RecyclableMemoryStream.dll
 D:\HuyPham_MF869\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\System.Xml.XPath.XmlDocument.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\Microsoft.AspNetCore.Http.Features.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+C:\Document Study\MISA_Training\Backend\MISA.CukCuk.API\MISA.CukCuk\MISA.CukCuk\MISA.CukCuk.Web\bin\Debug\net5.0\System.IO.Pipelines.dll
