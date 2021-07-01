@@ -66,6 +66,7 @@ namespace MISA.ApplicationCore.Entities
         /// <summary>
         /// Giới tính (0- nữ, 1- nam, 2- khác)
         /// </summary>
+        [DisplayName("Giới tính")]
         public int? Gender { get; set; }
 
         /// <summary>
@@ -78,18 +79,22 @@ namespace MISA.ApplicationCore.Entities
         /// <summary>
         /// Ngày tạo
         /// </summary>
+        [DisplayName("Ngày tạo")]
         public DateTime? CreatedDate { get; set; }
 
         /// <summary>
         /// Tạo bỏi
         /// </summary>
+        [DisplayName("Tạo bởi")]
         public string? CreatedBy { get; set; }
 
+        [DisplayName("Ngày thay đổi")]
         public DateTime? ModifiedDate { get; set; }
 
         /// <summary>
         /// Ngày thay đổi
         /// </summary>
+        [DisplayName("Thay đổi bởi")]
         public string? ModifiedBy { get; set; }
 
         /// <summary>
@@ -101,27 +106,26 @@ namespace MISA.ApplicationCore.Entities
         /// <summary>
         /// Mã số thẻ thành viên
         /// </summary>
+        [DisplayName("Mã thẻ thành viên")]
         public string? MemberCardCode { get; set; }
 
         /// <summary>
         /// note
         /// </summary>
+        [DisplayName("Ghi chú")]
         public string? Note { get; set; }
 
         /// <summary>
         /// Tên công ty
         /// </summary>
+        [DisplayName("Tên công ty")]
         public string? CompanyName { get; set; }
-        
+
         /// <summary>
         /// Mã số thuế công ty
         /// </summary>
+        [DisplayName("Mã số thuế")]
         public string? CompanyTaxCode { get; set; }
-
-        /// <summary>
-        /// result validate
-        /// </summary>
-        public object valdResult { get; set; }
 
         #endregion
 

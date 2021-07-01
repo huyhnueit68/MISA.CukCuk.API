@@ -216,138 +216,148 @@ namespace MISA.ApplicationCore.Service
                 }
 
                 // match value with resource
+                List<Generic> listGenerics = new List<Generic>();
+                //Lấy tất cả property
+                var properties = typeof(Generic).GetProperties()
+                                .Where(p => p.IsDefined(typeof(DisplayNameAttribute), false))
+                                .Select(p => new
+                                {
+                                    PropertyName = p.Name,
+                                    DisplayName = p.GetCustomAttributes(typeof(DisplayNameAttribute),
+                                            false).Cast<DisplayNameAttribute>().Single().DisplayName,
+                                    DataType = p.PropertyType
+                                    });
+
                 for (int i = 3; i <= rows; i++)
                 {
-                    /*List<object> temp = new List<object>();*/
-                    SortedList temp = new SortedList();
+                    List<object> temp = new List<object>();
+                    var entity = (Generic)Activator.CreateInstance(typeof(Generic), new object[] { });
 
-                    var temp1 = new { };
                     for (int j = 0; j < listKey.Count(); j++)
                     {
                         string key = listKey[j];
                         string value = "";
                         if (worksheet.Cells[i, j + 1].Value != null)
                         {
-                            value = worksheet.Cells[i, j + 1].Value.ToString();
+                            value = worksheet.Cells[i, j + 1].Value != null ?
+                                            worksheet.Cells[i, j + 1].Value.ToString().Trim() : "";
+
+                            entity.GetType().GetProperty(listKey[j]).SetValue(entity, value);
                         }
-                        temp.Add(key, value);
                     }
 
-                    /*var json = JsonSerializer.Serialize(temp);*/
-
-                    objDataTable.Add(temp);
+                    listGenerics.Add(entity);
                 }
 
-                /* validate object and set status for data */
+            /* validate object and set status for data *//*
 
-                // validate in file
-                for (int i = 0; i < objDataTable.Count(); i++)
+            // validate in file
+            for (int i = 0; i < objDataTable.Count(); i++)
+            {
+                // get items need compare
+                SortedList items = objDataTable[i];
+                List<object> consoleMess = new List<object>();
+                bool isNull = true, isDuplicateFile = true, isDuplicateDb = true;
+
+                for (int j = 0; j < objDataTable.Count(); j++)
                 {
-                    // get items need compare
-                    SortedList items = objDataTable[i];
-                    List<object> consoleMess = new List<object>();
-                    bool isNull = true, isDuplicateFile = true, isDuplicateDb = true;
-
-                    for (int j = 0; j < objDataTable.Count(); j++)
+                    if (i != j)
                     {
-                        if (i != j)
+                        ServiceResult serviceResult = new ServiceResult();
+                        serviceResult.MISACode = MISAEnum.IsValid;
+                        SortedList temp = objDataTable[j]; // get items need compare
+
+                        foreach (var item in items)
                         {
-                            ServiceResult serviceResult = new ServiceResult();
-                            serviceResult.MISACode = MISAEnum.IsValid;
-                            SortedList temp = objDataTable[j]; // get items need compare
-                        
-                            foreach (var item in items)
+                            string validate = "ValidateResult";
+
+                            // validate code
+                            if (item.GetType().GetProperty("Key").GetValue(item).ToString() == $"{_tableName}Code")
                             {
-                                string validate = "ValidateResult";
+                                string valueResource = GetValueResource($"{_tableName}Code");
+                                var value = item.GetType().GetProperty("Value").GetValue(item);
+                                // validate not null
 
-                                // validate code
-                                if (item.GetType().GetProperty("Key").GetValue(item).ToString() == $"{_tableName}Code")
+                                if (value is null or "")
                                 {
-                                    string valueResource = GetValueResource($"{_tableName}Code");
-                                    var value = item.GetType().GetProperty("Value").GetValue(item);
-                                    // validate not null
-
-                                    if (value is null or "")
+                                    if(isNull)
                                     {
-                                        if(isNull)
-                                        {
-                                            serviceResult.MISACode = MISAEnum.NotValid;
-                                            serviceResult.Messenger = $"{valueResource} không được để trống";
-                                            isNull = false;
-                                            consoleMess.Add(serviceResult);
-                                            // add resource to object
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // validate duplicate in file
-                                        string itemCode = item.GetType().GetProperty("Value").GetValue(item).ToString();
-                                        string valueValidate = getValueSortedList(temp, $"{_tableName}Code");
-
-                                        if (itemCode == valueValidate)
-                                        {
-                                            if(isDuplicateFile)
-                                            {
-                                                // set message service result
-                                                serviceResult.MISACode = MISAEnum.NotValid;
-                                                serviceResult.Messenger = $"{valueResource} {itemCode} đã trùng lặp trong tệp của bạn";
-                                                isDuplicateFile = false;
-                                                consoleMess.Add(serviceResult);
-                                            }
-                                        }
-
-                                        // validate in database
-                                        var resFilter = _baseRepository.GetByCode(itemCode);
-                                        if (resFilter.Count() > 0)
-                                        {
-                                            if(isDuplicateDb)
-                                            {
-                                                // set message service result
-                                                serviceResult.MISACode = MISAEnum.NotValid;
-                                                serviceResult.Messenger = $"{valueResource} {itemCode} đã trùng lặp trong hệ thống";
-                                                consoleMess.Add(serviceResult);
-                                                isDuplicateDb = false;
-                                            }
-                                        }
-
+                                        serviceResult.MISACode = MISAEnum.NotValid;
+                                        serviceResult.Messenger = $"{valueResource} không được để trống";
+                                        isNull = false;
+                                        consoleMess.Add(serviceResult);
                                         // add resource to object
-
-
-                                        TestResult(objDataTable[i]);
                                     }
                                 }
+                                else
+                                {
+                                    // validate duplicate in file
+                                    string itemCode = item.GetType().GetProperty("Value").GetValue(item).ToString();
+                                    string valueValidate = getValueSortedList(temp, $"{_tableName}Code");
 
-                                // validate datetime
+                                    if (itemCode == valueValidate)
+                                    {
+                                        if(isDuplicateFile)
+                                        {
+                                            // set message service result
+                                            serviceResult.MISACode = MISAEnum.NotValid;
+                                            serviceResult.Messenger = $"{valueResource} {itemCode} đã trùng lặp trong tệp của bạn";
+                                            isDuplicateFile = false;
+                                            consoleMess.Add(serviceResult);
+                                        }
+                                    }
 
+                                    // validate in database
+                                    var resFilter = _baseRepository.GetByCode(itemCode);
+                                    if (resFilter.Count() > 0)
+                                    {
+                                        if(isDuplicateDb)
+                                        {
+                                            // set message service result
+                                            serviceResult.MISACode = MISAEnum.NotValid;
+                                            serviceResult.Messenger = $"{valueResource} {itemCode} đã trùng lặp trong hệ thống";
+                                            consoleMess.Add(serviceResult);
+                                            isDuplicateDb = false;
+                                        }
+                                    }
+
+                                    // add resource to object
+
+
+                                    TestResult(objDataTable[i]);
+                                }
                             }
-                        }
 
+                            // validate datetime
+
+                        }
                     }
                 }
-
-                var json = JsonSerializer.Serialize(objDataTable);
-
-                return json;
-
-            /*try
-            {
-               
             }
-            catch (Exception ce)
-            {
-                return ce.ToString();
-            }*/
-        }
 
-        private string TestResult(SortedList items)
+            var json = JsonSerializer.Serialize(objDataTable);
+
+            return json;
+
+        *//*try
         {
-            foreach(var item in items)
+
+        }
+        catch (Exception ce)
+        {
+            return ce.ToString();
+        }*//*
+    }
+
+    private string TestResult(SortedList items)
+    {
+        foreach(var item in items)
+        {
+            if(item.GetType().GetProperty("Key").GetValue(item).ToString() == "ValidateResult")
             {
-                if(item.GetType().GetProperty("Key").GetValue(item).ToString() == "ValidateResult")
-                {
-                    return "";
-                }
+                return "";
             }
+        }*/
 
             return "";
         }
