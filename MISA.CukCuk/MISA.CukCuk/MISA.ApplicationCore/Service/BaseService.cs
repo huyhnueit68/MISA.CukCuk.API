@@ -71,7 +71,6 @@ namespace MISA.ApplicationCore.Service
                 _serviceResult.Data = _baseRepository.Insert(data);
             }
 
-
             return _serviceResult;
         }
 
@@ -183,7 +182,8 @@ namespace MISA.ApplicationCore.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Generic> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken)
+        /*public IEnumerable<Generic> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken)*/
+        public string ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken)
         {
             List<Generic> listGenerics = new List<Generic>();
             
@@ -246,8 +246,7 @@ namespace MISA.ApplicationCore.Service
 
                             if (worksheet.Cells[i, j + 1].Value != null)
                             {
-                                value = worksheet.Cells[i, j + 1].Value != null ?
-                                                worksheet.Cells[i, j + 1].Value.ToString().Trim() : "";
+                                value = worksheet.Cells[i, j + 1].Value != null ? worksheet.Cells[i, j + 1].Value.ToString().Trim() : "";
 
                                 // format data
                                 dynamic convertData = FormatData(generic.GetType().GetProperty(key).PropertyType, value);
@@ -268,22 +267,28 @@ namespace MISA.ApplicationCore.Service
 
             foreach (var generic in listGenerics)
             {
-                generic.Status = new List<string>();
+                generic.MsgImport = new List<string>();
 
                 var isValid = this.ValidateImport(generic, dataGetAll, checkedProp);
 
-                if (generic.Status.Count == 0)
+                if (generic.MsgImport.Count == 0)
                 {
                     ServiceResult temp = new ServiceResult();
                     temp.MISACode = MISAEnum.IsValid;
                     temp.Messenger = "Hợp lệ";
                     generic.ImportResult = temp;
-                    /*generic.Status.Add("Hợp lệ");*/
+                    generic.MsgImport.Add("Hợp lệ");
+                } else
+                {
+                    ServiceResult temp = new ServiceResult();
+                    temp.MISACode = MISAEnum.NotValid;
+                    temp.Messenger = "Dữ liệu không hợp lệ";
+                    generic.ImportResult = temp;
+                    generic.MsgImport.Add("Dữ liệu không hợp lệ");
                 }
             }
 
             string CacheKey = $"{_tableName}{Guid.NewGuid()}";
-            CacheKey = "customer";
             // Store data in the cache    
             CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
             cacheItemPolicy.AbsoluteExpiration = DateTime.Now.AddHours(60.0);
@@ -291,7 +296,7 @@ namespace MISA.ApplicationCore.Service
             GetDataByKeyCache(CacheKey);
 
             // return result
-            return listGenerics;
+            return CacheKey;
         }
 
         /// <summary>
@@ -358,15 +363,17 @@ namespace MISA.ApplicationCore.Service
 
         private bool ValidateImport(Generic generic, IEnumerable<Generic> dataGetAll = null, IDictionary<object, List<string>> checkedProp = null)
         {
-            var isValid = true;
+            var isValid1 = true;
+            var isValid2 = true;
             if (generic == null && checkedProp == null)
             {
-                generic.Status = new List<string>();
+                generic.MsgImport = new List<string>();
             }
 
             // validate từng trường trong generic
             // Get all property:
             var properties = generic.GetType().GetProperties();
+            
             foreach (var property in properties)
             {
                 // get property name
@@ -387,28 +394,39 @@ namespace MISA.ApplicationCore.Service
                 // check attribute need validate -  validate require
                 if (property.IsDefined(typeof(Required), false))
                 {
-                    isValid = validateRequired(property.GetValue(generic), propertyName);
+                    isValid1 = validateRequired(property.GetValue(generic), propertyName);
                 }
 
                 // validate check duplicate
                 if (property.IsDefined(typeof(CheckDuplicate), false))
                 {
                     // check duplicate data
-                    isValid = this.ValidateDuplicate(generic, property.Name, propertyName, dataGetAll, checkedProp);
+                    isValid2 = this.ValidateDuplicate(generic, property.Name, propertyName, dataGetAll, checkedProp);
                 }
             }
+            
             ServiceResult temp = new ServiceResult();
             temp.ImportMsg = _checkedResult;
-            if (!isValid)
+            if(isValid1 && isValid2)
             {
                 temp.MISACode = MISAEnum.IsValid;
+                temp.Data = isValid1;
+            } else
+            {
+                temp.MISACode = MISAEnum.NotValid;
+                temp.Data = isValid1;
             }
 
             generic.ImportResult = temp;
-            /*generic.Status.AddRange(_checkedResult);*/
+            generic.MsgImport.AddRange(_checkedResult);
             _checkedResult.Clear();
 
-            return isValid;
+            if (isValid1 && isValid2)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool ValidateDuplicate(Generic entity, string propertyName, string displayName, IEnumerable<Generic> dataGetAll, IDictionary<object, List<string>> checkedProp)
@@ -444,7 +462,6 @@ namespace MISA.ApplicationCore.Service
         /// <returns></returns>
         private bool ValidateDuplicateFile(object value, string propertyName, string displayName, IDictionary<object, List<string>> checkedProp)
         {
-            //Nếu chưa từng có trong map
             if (!checkedProp.ContainsKey(value))
             {
                 var list = new List<string>();
@@ -454,7 +471,6 @@ namespace MISA.ApplicationCore.Service
             }
             else
             {
-                //Nếu dữ liệu đã từng xuất hiện
                 if (checkedProp[value].Contains(propertyName))
                 {
                     _checkedResult.Add($"{displayName} đã trùng với {displayName} khác trong file");
@@ -812,7 +828,7 @@ namespace MISA.ApplicationCore.Service
             ServiceResult serviceResult = new ServiceResult();
             // get data by key cache
             List<Generic> resValue = (List<Generic>)GetDataByKeyCache(CacheKey);
-
+            int count = 0;
             if (resValue != null)
             {
                 foreach(Generic generic in resValue)
@@ -827,7 +843,7 @@ namespace MISA.ApplicationCore.Service
                         foreach (var property in properties)
                         {
                             var propertyName = property.Name;
-                            if (propertyName != "ImportResult" && propertyName != "EntityState")
+                            if (propertyName != "ImportResult" && propertyName != "EntityState" && propertyName != "MsgImport")
                             {
                                 var valueAdd = " ";
                                 var propertyValue = property.GetValue(generic);
@@ -838,11 +854,15 @@ namespace MISA.ApplicationCore.Service
                                 }
 
                                 dynamic convertData = FormatData(propertyType, valueAdd, false);
-                                tempGeneric.GetType().GetProperty(propertyName).SetValue(generic, convertData);
+                                tempGeneric.GetType().GetProperty(propertyName).SetValue(tempGeneric, convertData);
                             }
                         }
 
                         serviceResult = Insert(tempGeneric);
+                        if(serviceResult.MISACode == MISAEnum.Success || serviceResult.MISACode == MISAEnum.IsValid)
+                        {
+                            count++;
+                        }
                     }
                 }
             }
@@ -852,6 +872,8 @@ namespace MISA.ApplicationCore.Service
                 serviceResult.Messenger = "Dữ liệu cache không tồn tại";
             }
 
+            serviceResult.Data = count;
+            serviceResult.Messenger = $"Số bản ghi thêm thành công: {count}";
             return serviceResult;
         }
 

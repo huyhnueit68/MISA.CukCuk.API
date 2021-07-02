@@ -38,7 +38,7 @@ namespace MISA.ApplicationCore.Entities
 
         public string? ModifedBy { get; set; }
 
-        public List<string> Status { get; set; }
+        public List<string> MsgImport { get; set; }
 
         public ServiceResult ImportResult { get; set; }
 

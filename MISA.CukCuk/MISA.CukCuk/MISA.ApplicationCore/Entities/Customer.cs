@@ -59,6 +59,7 @@ namespace MISA.ApplicationCore.Entities
         /// Số điện thoại
         /// </summary>
         [CheckDuplicate]
+        [Required]
         [DisplayName("Số điện thoại")]
         public string PhoneNumber { get; set; }
 
@@ -73,6 +74,7 @@ namespace MISA.ApplicationCore.Entities
         /// email khách hàng
         /// </summary>
         [CheckDuplicate]
+        [Required]
         [DisplayName("Email")]
         public string Email { get; set; }
 

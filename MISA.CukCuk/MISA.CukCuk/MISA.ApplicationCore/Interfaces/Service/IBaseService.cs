@@ -56,7 +56,7 @@ namespace MISA.ApplicationCore.Interfaces
         /// <param name="generics"> dữ liệu file</param>
         /// <returns>Trả về danh sách dữ liệu và kết quả sau khi xử lý</returns>
         /// CreatedBy: PQ Huy (24.06.2021)
-        IEnumerable<Generic> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken);
+        string ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken);
 
         /// <summary>
         /// Nập khẩu dữ liệu

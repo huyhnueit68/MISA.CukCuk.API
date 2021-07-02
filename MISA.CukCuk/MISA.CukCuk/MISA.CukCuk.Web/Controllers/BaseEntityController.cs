@@ -74,12 +74,11 @@ namespace MISA.CukCuk.Web.Controllers
         }
 
         [HttpPost("import")]
-        public IEnumerable<Generic> Import(IFormFile formFile, CancellationToken cancellationToken)
+        public string Import(IFormFile formFile, CancellationToken cancellationToken)
         {
             var resultGeneric = _baseService.ProcessDataImport(formFile, cancellationToken);
 
             // xử lý trả về dữ liệu
-
             return resultGeneric;
         }
 
@@ -146,7 +145,7 @@ namespace MISA.CukCuk.Web.Controllers
             }
             else
             {
-                return NoContent();
+                return BadRequest(serviceResult);
             }
         }
         #endregion
