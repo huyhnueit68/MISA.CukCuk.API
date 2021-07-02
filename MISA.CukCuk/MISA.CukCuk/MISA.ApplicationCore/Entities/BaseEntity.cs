@@ -37,5 +37,10 @@ namespace MISA.ApplicationCore.Entities
         public DateTime? ModifedDate { get; set; }
 
         public string? ModifedBy { get; set; }
+
+        public List<string> Status { get; set; }
+
+        public ServiceResult ImportResult { get; set; }
+
     }
 }

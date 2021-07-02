@@ -55,15 +55,16 @@ namespace MISA.ApplicationCore.Interfaces
         /// </summary>
         /// <param name="generics"> dữ liệu file</param>
         /// <returns>Trả về danh sách dữ liệu và kết quả sau khi xử lý</returns>
-        Task<ServiceResult> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken);
+        /// CreatedBy: PQ Huy (24.06.2021)
+        IEnumerable<Generic> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken);
 
         /// <summary>
         /// Nập khẩu dữ liệu
         /// </summary>
-        /// <param name="data">Dữ liệu nhận khẩu</param>
+        /// <param name="CacheKey">key cache</param>
         /// <returns>Trả về số bản ghi nhập khẩu thành công</returns>
-        /// CreatedBy: PQ Huy (29.06.2021)
-        ServiceResult ImportData(IEnumerable<Generic> generics);
+        /// CreatedBy: PQ Huy (02.07.2021)
+        ServiceResult MutilpleInsert(string CacheKey);
 
     }
 }

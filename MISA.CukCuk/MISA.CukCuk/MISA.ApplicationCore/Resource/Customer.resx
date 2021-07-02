@@ -117,48 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Address" xml:space="preserve">
+  <data name="Adress" xml:space="preserve">
     <value>Địa Chỉ</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="CompanyName" xml:space="preserve">
     <value>Tên Công Ty</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="CompanyTaxCode" xml:space="preserve">
     <value>Mã Số Thuế</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="CustomerCode" xml:space="preserve">
     <value>Mã Khách Hàng</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="CustomerGroupName" xml:space="preserve">
     <value>Nhóm Khách Hàng</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="DateOfBirth" xml:space="preserve">
     <value>Ngày Sinh</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Tên Khách Hàng</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="MemberCardCode" xml:space="preserve">
     <value>Mã Thẻ Thành Viên</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Ghi chú</value>
-    <comment>CheckDuplicate</comment>
   </data>
   <data name="PhoneNumber" xml:space="preserve">
     <value>Số Điện Thoại</value>
-    <comment>CheckDuplicate</comment>
   </data>
 </root>

@@ -131,7 +131,10 @@ namespace MISA.Infrastructure
                 {
                     parameters.Add($"@{propertyName}", propertyValue, DbType.String);
                 }
-                else
+                else if (propertyType == typeof(ServiceResult))
+                {
+                    continue;
+                } else
                 {
                     parameters.Add($"@{propertyName}", propertyValue);
                 }
@@ -174,6 +177,31 @@ namespace MISA.Infrastructure
             serviceResult.MISACode = MISAEnum.Success;
 
             return serviceResult;
+        }
+
+        public IEnumerable<Generic> GetEntityByProperty(Generic generic, string propertyName)
+        {
+            var propvalue = generic.GetType().GetProperty(propertyName).GetValue(generic);
+
+            string query = $"select * FROM {_tableName} where {propertyName} = '{propvalue}'";
+            var entitySearch = _dbConnection.Query<Generic>(query);
+
+            return entitySearch;
+        }
+
+        public ServiceResult MutilpleInsert(List<Generic> generics)
+        {
+            int count = 0;
+            foreach(Generic generic in generics)
+            {
+                ServiceResult res = Insert(generic);
+
+                if(res.MISACode == MISAEnum.IsValid)
+                {
+                    count++;
+                }
+            }
+            throw new NotImplementedException();
         }
 
         #endregion

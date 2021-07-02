@@ -20,6 +20,11 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
 using System.Threading;
+using Microsoft.PowerBI.Api.Models;
+using Microsoft.Extensions.Caching.Memory;
+using ImportInfo = MISA.ApplicationCore.Entities.ImportInfo;
+using System.Runtime.Caching;
+using MemoryCache = System.Runtime.Caching.MemoryCache;
 
 namespace MISA.ApplicationCore.Service
 {
@@ -29,6 +34,8 @@ namespace MISA.ApplicationCore.Service
         IBaseRepository<Generic> _baseRepository;
         ServiceResult _serviceResult;
         public string _tableName = string.Empty;
+        List<string> _checkedResult = new List<string>();
+        ObjectCache cache = MemoryCache.Default;
         #endregion
 
         #region Contructor
@@ -176,42 +183,13 @@ namespace MISA.ApplicationCore.Service
             throw new NotImplementedException();
         }
 
-
-        public async Task<ServiceResult> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken)
+        public IEnumerable<Generic> ProcessDataImport(IFormFile formFile, CancellationToken cancellationToken)
         {
-            if (formFile == null || formFile.Length <= 0)
-            {
-                var msg = new
-                {
-                    devMsg = "File không có dữ liệu.",
-                    userMsg = "File không có dữ liệu.",
-                    Code = MISAEnum.IsValid
-                };
-
-                _serviceResult.Data = msg;
-                _serviceResult.MISACode = MISAEnum.IsValid;
-                _serviceResult.Messenger = "Không có dữ liệu để import";
-            }
-
-            if (!Path.GetExtension(formFile.FileName).Equals(".xlsx", StringComparison.OrdinalIgnoreCase))
-            {
-                var msg = new
-                {
-                    devMsg = "Định dạng file không được hỗ trợ.",
-                    userMsg = "Định dạng file không được hỗ trợ.",
-                    Code = MISAEnum.IsValid
-                };
-
-                _serviceResult.Data = msg;
-                _serviceResult.MISACode = MISAEnum.IsValid;
-                _serviceResult.Messenger = "Định dạng file không được hỗ trợ";
-            }
-
-            var entities = new List<Generic>();
-
+            List<Generic> listGenerics = new List<Generic>();
+            
             using (var stream = new MemoryStream())
             {
-                await formFile.CopyToAsync(stream, cancellationToken);
+                formFile.CopyToAsync(stream, cancellationToken);
 
                 using (var package = new ExcelPackage(stream))
                 {
@@ -229,7 +207,6 @@ namespace MISA.ApplicationCore.Service
                         Convert data table to object with key and value
                      */
                     List<string> listKey = new List<string>();
-                    List<Generic> listGenerics = new List<Generic>();
 
                     // get title table convert to resource
                     for (int i = 1; i <= columns; i++)
@@ -260,7 +237,7 @@ namespace MISA.ApplicationCore.Service
                     for (int i = 3; i <= rows; i++)
                     {
                         List<object> temp = new List<object>();
-                        var entity = (Generic)Activator.CreateInstance(typeof(Generic), new object[] { });
+                        var generic = (Generic)Activator.CreateInstance(typeof(Generic), new object[] { });
 
                         for (int j = 0; j < listKey.Count(); j++)
                         {
@@ -272,25 +249,76 @@ namespace MISA.ApplicationCore.Service
                                 value = worksheet.Cells[i, j + 1].Value != null ?
                                                 worksheet.Cells[i, j + 1].Value.ToString().Trim() : "";
 
-                                value = FormatData(entity.GetType().GetProperty(listKey[j]).PropertyType, value);
-                                entity.GetType().GetProperty(listKey[j]).SetValue(entity, value);
+                                // format data
+                                dynamic convertData = FormatData(generic.GetType().GetProperty(key).PropertyType, value);
+
+                                // set value data
+                                generic.GetType().GetProperty(key).SetValue(generic, convertData);
                             }
                         }
-
-                        listGenerics.Add(entity);
+                        // add component to list
+                        listGenerics.Add(generic);
                     }
                 }
             }
 
+            // validate data
+            var dataGetAll = _baseRepository.Get();
+            IDictionary<object, List<string>> checkedProp = new Dictionary<object, List<string>>();
 
-            return _serviceResult;
+            foreach (var generic in listGenerics)
+            {
+                generic.Status = new List<string>();
 
+                var isValid = this.ValidateImport(generic, dataGetAll, checkedProp);
+
+                if (generic.Status.Count == 0)
+                {
+                    ServiceResult temp = new ServiceResult();
+                    temp.MISACode = MISAEnum.IsValid;
+                    temp.Messenger = "Hợp lệ";
+                    generic.ImportResult = temp;
+                    /*generic.Status.Add("Hợp lệ");*/
+                }
+            }
+
+            string CacheKey = $"{_tableName}{Guid.NewGuid()}";
+            CacheKey = "customer";
+            // Store data in the cache    
+            CacheItemPolicy cacheItemPolicy = new CacheItemPolicy();
+            cacheItemPolicy.AbsoluteExpiration = DateTime.Now.AddHours(60.0);
+            cache.Add(CacheKey, listGenerics, cacheItemPolicy);
+            GetDataByKeyCache(CacheKey);
+
+            // return result
+            return listGenerics;
         }
 
-        private dynamic FormatData(Type type, string value)
+        /// <summary>
+        /// function test get data cache by key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// PQ Huy (02.07.2021)
+        private IEnumerable<Generic> GetDataByKeyCache(string key)
+        {
+            if (cache.Contains(key))
+                return (IEnumerable<Generic>)cache.Get(key);
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// function format data import
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// PQ Huy (01.07.2021)
+        private dynamic FormatData(Type type, string value, bool statusValid = true)
         {
             dynamic res = null;
-            if (value == "")
+            if (value.ToString().Trim() == "")
                 return res;
 
             if(type == typeof(Guid))
@@ -303,23 +331,195 @@ namespace MISA.ApplicationCore.Service
             {
                 type = Nullable.GetUnderlyingType(type);
                 //Đổi format ngày tháng
-                if (type.Name == "DateTime")
+                if(statusValid)
                 {
-                    var temp = Regex.Split(value, @"/").ToList();
-                    while (temp.Count < 3)
+                    if (type.Name == "DateTime")
                     {
-                        temp.Insert(0, "01");
+                        var temp = Regex.Split(value, @"/").ToList();
+                        while (temp.Count < 3)
+                        {
+                            temp.Insert(0, "01");
+                        }
+                        temp.Reverse();
+                        value = String.Join('-', temp);
                     }
-                    temp.Reverse();
-                    value = String.Join('-', temp);
                 }
             }
-
-            res = Convert.ChangeType(value, type);
+            try
+            {
+                res = Convert.ChangeType(value, type);
+            } catch (Exception e)
+            {
+                res = value;
+            }
 
             return res;
         }
 
+        private bool ValidateImport(Generic generic, IEnumerable<Generic> dataGetAll = null, IDictionary<object, List<string>> checkedProp = null)
+        {
+            var isValid = true;
+            if (generic == null && checkedProp == null)
+            {
+                generic.Status = new List<string>();
+            }
+
+            // validate từng trường trong generic
+            // Get all property:
+            var properties = generic.GetType().GetProperties();
+            foreach (var property in properties)
+            {
+                // get property name
+                var propertyName = "";
+                if (property.GetCustomAttributesData().Count() != 0)
+                {
+                    try
+                    {
+                        propertyName = property.GetCustomAttributes(typeof(DisplayNameAttribute), true).Cast<DisplayNameAttribute>().Single().DisplayName;
+                    }
+                    catch (Exception ce)
+                    {
+                        propertyName = "";
+                        Console.Write(ce);
+                    }
+                }
+
+                // check attribute need validate -  validate require
+                if (property.IsDefined(typeof(Required), false))
+                {
+                    isValid = validateRequired(property.GetValue(generic), propertyName);
+                }
+
+                // validate check duplicate
+                if (property.IsDefined(typeof(CheckDuplicate), false))
+                {
+                    // check duplicate data
+                    isValid = this.ValidateDuplicate(generic, property.Name, propertyName, dataGetAll, checkedProp);
+                }
+            }
+            ServiceResult temp = new ServiceResult();
+            temp.ImportMsg = _checkedResult;
+            if (!isValid)
+            {
+                temp.MISACode = MISAEnum.IsValid;
+            }
+
+            generic.ImportResult = temp;
+            /*generic.Status.AddRange(_checkedResult);*/
+            _checkedResult.Clear();
+
+            return isValid;
+        }
+
+        private bool ValidateDuplicate(Generic entity, string propertyName, string displayName, IEnumerable<Generic> dataGetAll, IDictionary<object, List<string>> checkedProp)
+        {
+            var isValid = true;
+            var value = entity.GetType().GetProperty(propertyName).GetValue(entity);
+
+            if (value != null)
+            {
+                // validate dữ liệu trong file excel
+                isValid = this.ValidateDuplicateFile(value, propertyName, displayName, checkedProp);
+                // validate với dữ liệu trên db
+                isValid = this.ValidateDuplicateDb(dataGetAll, propertyName, value, displayName);
+
+            }
+
+            if (!isValid)
+            {
+                _serviceResult.MISACode = MISAEnum.IsValid;
+                _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+            }
+
+            return isValid;
+        }
+
+        /// <summary>
+        /// validate dữ liệu trên hệ thống
+        /// </summary>
+        /// <param name="uniqueProp"></param>
+        /// <param name="value"></param>
+        /// <param name="propName"></param>
+        /// <param name="displayName"></param>
+        /// <returns></returns>
+        private bool ValidateDuplicateFile(object value, string propertyName, string displayName, IDictionary<object, List<string>> checkedProp)
+        {
+            //Nếu chưa từng có trong map
+            if (!checkedProp.ContainsKey(value))
+            {
+                var list = new List<string>();
+                list.Add(propertyName);
+
+                checkedProp.Add(value, list);
+            }
+            else
+            {
+                //Nếu dữ liệu đã từng xuất hiện
+                if (checkedProp[value].Contains(propertyName))
+                {
+                    _checkedResult.Add($"{displayName} đã trùng với {displayName} khác trong file");
+
+                    return false;
+                }
+                else
+                {
+                    checkedProp[value].Add(propertyName);
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// validate duplicate in database
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <param name="propName"></param>
+        /// <param name="value"></param>
+        /// <param name="displayName"></param>
+        /// <returns></returns>
+        /// PQ Huy (01.07.2021)
+        private bool ValidateDuplicateDb(IEnumerable<Generic> dataGetAll, string propertyName, object value, string displayName)
+        {
+            var filterResult = dataGetAll.Where(item => item.GetType().GetProperty(propertyName).GetValue(item).ToString() == value.ToString()).FirstOrDefault();
+
+            if (filterResult != null)
+            {
+                string message = $"{displayName} đã tồn tại trong hệ thống";
+                _checkedResult.Add(message);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///  funtion validate require
+        /// </summary>
+        /// <param name="val"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        /// PQ Huy (02.07.2021)
+        private bool validateRequired(object val, object propertyName)
+        {
+            if (val == null || val.ToString().Length == 0)
+            {
+                _checkedResult.Add($"{propertyName} không được để trống");
+                _serviceResult.MISACode = MISAEnum.IsValid;
+                _serviceResult.Messenger = "Dữ liệu không hợp lệ";
+
+                return false;
+            }
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// hàm này viết dở theo cách nhét data vô object khó quá bỏ
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         #region test
         public string ProcessDataImport2(string path)
         {
@@ -573,6 +773,13 @@ namespace MISA.ApplicationCore.Service
             return value;
         }
 
+        /// <summary>
+        /// function covert data sao cho đúng kiểu
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        /// PQ Huy (01.07.2021)
         private dynamic ConvertFormatData(Type type, string value)
         {
             dynamic res = null;
@@ -600,9 +807,52 @@ namespace MISA.ApplicationCore.Service
             return res;
         }
 
-        public ServiceResult ImportData(IEnumerable<Generic> generics)
+        public ServiceResult MutilpleInsert(string CacheKey)
         {
-            throw new NotImplementedException();
+            ServiceResult serviceResult = new ServiceResult();
+            // get data by key cache
+            List<Generic> resValue = (List<Generic>)GetDataByKeyCache(CacheKey);
+
+            if (resValue != null)
+            {
+                foreach(Generic generic in resValue)
+                {
+                    if(generic.ImportResult.MISACode == MISAEnum.IsValid)
+                    {
+                        // convert status data import 
+                        var tempGeneric = (Generic)Activator.CreateInstance(typeof(Generic), new object[] { });
+
+                        var properties = generic.GetType().GetProperties();
+
+                        foreach (var property in properties)
+                        {
+                            var propertyName = property.Name;
+                            if (propertyName != "ImportResult" && propertyName != "EntityState")
+                            {
+                                var valueAdd = " ";
+                                var propertyValue = property.GetValue(generic);
+                                var propertyType = generic.GetType().GetProperty(propertyName).PropertyType;
+                                if (propertyValue != null)
+                                {
+                                    valueAdd = propertyValue.ToString();
+                                }
+
+                                dynamic convertData = FormatData(propertyType, valueAdd, false);
+                                tempGeneric.GetType().GetProperty(propertyName).SetValue(generic, convertData);
+                            }
+                        }
+
+                        serviceResult = Insert(tempGeneric);
+                    }
+                }
+            }
+            else
+            {
+                serviceResult.MISACode = MISAEnum.NotValid;
+                serviceResult.Messenger = "Dữ liệu cache không tồn tại";
+            }
+
+            return serviceResult;
         }
 
         #endregion

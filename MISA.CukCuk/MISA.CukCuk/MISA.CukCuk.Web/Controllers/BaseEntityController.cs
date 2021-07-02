@@ -74,9 +74,13 @@ namespace MISA.CukCuk.Web.Controllers
         }
 
         [HttpPost("import")]
-        public Task<ServiceResult> Import(IFormFile formFile, CancellationToken cancellationToken)
+        public IEnumerable<Generic> Import(IFormFile formFile, CancellationToken cancellationToken)
         {
-            return _baseService.ProcessDataImport(formFile, cancellationToken);
+            var resultGeneric = _baseService.ProcessDataImport(formFile, cancellationToken);
+
+            // xử lý trả về dữ liệu
+
+            return resultGeneric;
         }
 
         // PUT api/<BaseEntityController>/5
@@ -108,6 +112,28 @@ namespace MISA.CukCuk.Web.Controllers
         {
             // gọi function lấy dữ liệu
             var serviceResult = _baseService.DeleteById(id);
+
+            //trả về dữ liệu
+            if (serviceResult.MISACode == MISAEnum.NotValid)
+            {
+                return BadRequest(serviceResult);
+            }
+            if (serviceResult.MISACode == MISAEnum.IsValid || serviceResult.MISACode == MISAEnum.Success)
+            {
+                return Ok(serviceResult);
+            }
+            else
+            {
+                return NoContent();
+            }
+        }
+
+        // Mass Insert api/<BaseEntityController>/7
+        [HttpPost("{keycache}")]
+        public IActionResult MassInsert(string keycache)
+        {
+            // gọi function lấy dữ liệu
+            var serviceResult = _baseService.MutilpleInsert(keycache);
 
             //trả về dữ liệu
             if (serviceResult.MISACode == MISAEnum.NotValid)

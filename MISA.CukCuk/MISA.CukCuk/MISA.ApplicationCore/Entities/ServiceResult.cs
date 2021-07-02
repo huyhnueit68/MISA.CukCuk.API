@@ -23,5 +23,10 @@ namespace MISA.ApplicationCore.Entities
         /// Define MISA code
         /// </summary>
         public MISAEnum MISACode { get; set; }
+
+        /// <summary>
+        /// Message thông báo trạng thái
+        /// </summary>
+        public List<string> ImportMsg { get; set; }
     }
 }

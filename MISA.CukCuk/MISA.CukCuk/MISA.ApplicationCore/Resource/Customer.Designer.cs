@@ -63,9 +63,9 @@ namespace MISA.ApplicationCore.Resource {
         /// <summary>
         ///   Looks up a localized string similar to Địa Chỉ.
         /// </summary>
-        internal static string Address {
+        internal static string Adress {
             get {
-                return ResourceManager.GetString("Address", resourceCulture);
+                return ResourceManager.GetString("Adress", resourceCulture);
             }
         }
         

@@ -73,5 +73,20 @@ namespace MISA.ApplicationCore.Interfaces
         /// CreatedBy: PQ Huy (29.06.2021)
         ServiceResult ImportData(Generic[] data);
 
+        /// <summary>
+        /// get generic by property name
+        /// </summary>
+        /// <param name="generic"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        IEnumerable<Generic> GetEntityByProperty(Generic generic, string propertyName);
+
+        /// <summary>
+        /// Nhập khẩu dữ liệu
+        /// </summary>
+        /// <param name="generics">data thêm vào</param>
+        /// <returns>Trả về số bản ghi nhập khẩu thành công</returns>
+        /// CreatedBy: PQ Huy (02.07.2021)
+        ServiceResult MutilpleInsert(List<Generic> generics);
     }
 }
